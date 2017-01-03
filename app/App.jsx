@@ -1,3 +1,4 @@
+import { CodeSplitProvider } from 'code-split-component'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -28,11 +29,13 @@ if (process.env.NODE_ENV === 'production') {
 const rootElement = document.getElementById('app')
 
 ReactDOM.render(
-  <AppContainer errorReporter={errorReporter}>
-    <Provider store={store}>
-      <Root />
-    </Provider>
-  </AppContainer>,
+  <CodeSplitProvider>
+    <AppContainer errorReporter={errorReporter}>
+      <Provider store={store}>
+        <Root />
+      </Provider>
+    </AppContainer>
+  </CodeSplitProvider>,
   rootElement,
 )
 
@@ -40,11 +43,13 @@ ReactDOM.render(
 if (module.hot) {
   module.hot.accept('./Root', () => {
     ReactDOM.render(
-      <AppContainer errorReporter={errorReporter}>
-        <Provider store={store}>
-          <Root />
-        </Provider>
-      </AppContainer>,
+      <CodeSplitProvider>
+        <AppContainer errorReporter={errorReporter}>
+          <Provider store={store}>
+            <Root />
+          </Provider>
+        </AppContainer>
+      </CodeSplitProvider>,
       rootElement,
     )
   })

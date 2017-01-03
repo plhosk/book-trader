@@ -2,6 +2,7 @@ require('es6-promise').polyfill()
 require('isomorphic-fetch')
 require('dotenv').config()
 const express = require('express')
+const historyApiFallback = require('connect-history-api-fallback')
 const path = require('path')
 const favicon = require('serve-favicon')
 const mongoose = require('mongoose')
@@ -57,10 +58,9 @@ app.use('/api/signup', require('./api/signup'))
 app.use('/api/login', require('./api/login'))
 app.use('/api/logout', require('./api/logout'))
 
-// default route for single-page app
-app.use('/', (req, res) => {
-  res.sendFile(path.resolve('public/index.html'))
-})
+// Handle 404 (incl. client-side routes) by redirecting to index.html
+app.use(historyApiFallback())
+app.use(getStaticAssets())
 
 app.listen(app.get('port'), () => {
   console.log('Server started on port ' + app.get('port')) // eslint-disable-line

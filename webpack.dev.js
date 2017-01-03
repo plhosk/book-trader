@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack') // eslint-disable-line
+const HtmlWebpackPlugin = require('html-webpack-plugin') // eslint-disable-line
 
 // const srcPath = path.join(__dirname, '/app')
 const buildPath = path.join(__dirname, '/public')
@@ -63,6 +64,10 @@ const config = {
       'process.env.NODE_ENV': JSON.stringify('development'), // eslint-disable-line
     }),
     new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'templates/index.ejs',
+    }),
   ],
   devtool: 'eval',
 }

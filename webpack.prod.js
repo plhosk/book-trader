@@ -1,3 +1,6 @@
+const CodeSplitWebpackPlugin = require('code-split-component/webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin') // eslint-disable-line
+
 const path = require('path')
 const webpack = require('webpack') // eslint-disable-line
 
@@ -5,13 +8,29 @@ const webpack = require('webpack') // eslint-disable-line
 const buildPath = path.join(__dirname, '/public')
 
 const config = {
-  entry: [
-    'babel-polyfill',
-    './app/App.jsx',
-  ],
+  entry: {
+    main: [
+      'babel-polyfill',
+      './app/App.jsx',
+    ],
+    vendor: [
+      'react',
+      'react-dom',
+      'redux',
+      'react-redux',
+      'react-router',
+      'redux-saga',
+      'history',
+      'inline-style-prefixer',
+      'lodash.merge',
+      'core-js',
+      'redbox-react',
+    ],
+  },
   output: {
     path: buildPath,
-    filename: './bundle.js',
+    filename: '[name].[chunkhash].js',
+    chunkFilename: '[chunkhash].js',
   },
   resolve: {
     modules: [
@@ -29,6 +48,7 @@ const config = {
           options: {
             cacheDirectory: true,
             presets: [['es2015', { modules: false }], 'stage-0', 'react'],
+            plugins: ['code-split-component/babel'],
           },
         }],
       },
@@ -47,6 +67,14 @@ const config = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'), // eslint-disable-line
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor', 'manifest'],
+    }),
+    new CodeSplitWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'templates/index.ejs',
     }),
   ],
 }
