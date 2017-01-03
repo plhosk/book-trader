@@ -2,7 +2,7 @@ import React from 'react'
 import { Match } from 'react-router'
 
 import TopBar from './TopBar'
-import Index from './Index'
+import Introduction from './Introduction'
 import UserPassForm from './auth/UserPassForm'
 
 const styles = {
@@ -17,7 +17,7 @@ const AppContent = () => (
   <div>
     <TopBar />
     <div style={styles.appContent}>
-      <Match pattern="/" exactly component={Index} />
+      <Match pattern="/" exactly component={Introduction} />
       <Match pattern="/login" exactly component={UserPassForm} />
       <Match pattern="/signup" exactly component={UserPassForm} />
     </div>

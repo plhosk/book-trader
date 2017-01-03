@@ -1,7 +1,6 @@
 /* eslint-disable no-constant-condition */
 
-import { takeLatest, takeEvery } from 'redux-saga'
-import { call, put } from 'redux-saga/effects'
+import { call, put, takeLatest, takeEvery } from 'redux-saga/effects'
 
 import api from '../api'
 
@@ -11,7 +10,8 @@ function* userObjectRequest() {
   if (response === 'empty') {
     yield put({ type: 'USER_OBJECT_EMPTY' })
   } else if (response) {
-    yield put({ type: 'USER_OBJECT_SUCCESS', user: response })
+    yield put({ type: 'USER_OBJECT_SUCCESS' })
+    yield put({ type: 'LOAD_USER_OBJECT', user: response })
   } else {
     yield put({ type: 'USER_OBJECT_ERROR', error })
     yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Error getting user object.' })
@@ -31,7 +31,8 @@ function* logoutRequest() {
 function* loginRequest(action) {
   const { response, error } = yield call(api.loginFetch, action.username, action.password)
   if (response) {
-    yield put({ type: 'LOGIN_SUCCESS', user: response })
+    yield put({ type: 'LOGIN_SUCCESS' })
+    yield put({ type: 'LOAD_USER_OBJECT', user: response })
   } else {
     yield put({ type: 'LOGIN_FAILED', error })
     yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Login failed. Username or password may be incorrect.' })
