@@ -39,7 +39,11 @@ const ErrorDisplay = ({ error, dispatch }) => (
 )
 ErrorDisplay.propTypes = {
   error: PropTypes.string,
-  dispatch: PropTypes.func,
+  dispatch: PropTypes.func.isRequired,
+}
+
+ErrorDisplay.defaultProps = {
+  error: '',
 }
 
 const mapStateToProps = state => ({

@@ -108,7 +108,11 @@ const UserPassForm = (props) => {
 UserPassForm.propTypes = {
   user: PropTypes.objectOf(PropTypes.string),
   pathname: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired, //eslint-disable-line
+  // dispatch: PropTypes.func.isRequired,
+}
+
+UserPassForm.defaultProps = {
+  user: undefined,
 }
 
 const mapStateToProps = state => ({

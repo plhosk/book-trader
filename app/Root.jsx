@@ -36,7 +36,7 @@ const Root = props => (
 
 
 Root.propTypes = {
-  location: PropTypes.object.isRequired, //eslint-disable-line
+  location: PropTypes.objectOf(PropTypes.string).isRequired,
   action: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
 }

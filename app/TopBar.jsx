@@ -116,7 +116,11 @@ class TopBar extends React.Component {
 
 TopBar.propTypes = {
   user: PropTypes.objectOf(React.PropTypes.string),
-  dispatch: PropTypes.func,
+  dispatch: PropTypes.func.isRequired,
+}
+
+TopBar.defaultProps = {
+  user: undefined,
 }
 
 const mapStateToProps = state => ({
