@@ -1,11 +1,11 @@
 import React from 'react'
 import { Match } from 'react-router'
-import { CodeSplit } from 'code-split-component'
+// import { createAsyncComponent } from 'react-async-component'
 
 import TopBar from './TopBar'
 import ErrorDisplay from './error/ErrorDisplay'
-// import Introduction from './Introduction'
-// import UserPassForm from './auth/UserPassForm'
+import Introduction from './Introduction'
+import UserPassForm from './auth/UserPassForm'
 
 const styles = {
   appContent: {
@@ -20,59 +20,41 @@ const AppContent = () => (
     <TopBar />
     <div style={styles.appContent}>
       <ErrorDisplay />
+      <Match pattern="/" exactly component={Introduction} />
+      <Match pattern="/login" exactly component={UserPassForm} />
+      <Match pattern="/signup" exactly component={UserPassForm} />
+      { /*
       <Match
         pattern="/"
         exactly
-        render={routerProps =>
-          <CodeSplit
-            chunkName="introduction"
-            modules={{ Introduction: require('./Introduction') }} //eslint-disable-line
-          >
-            {
-              ({ Introduction }) => Introduction && <Introduction {...routerProps} /> //eslint-disable-line
-            }
-          </CodeSplit>
-        }
+        render={() => {
+          const AsyncComponent = createAsyncComponent({
+            resolve: () => System.import('./Introduction'),
+          })
+          return <AsyncComponent />
+        }}
       />
       <Match
         pattern="/login"
         exactly
-        render={routerProps =>
-          <CodeSplit
-            chunkName="userpassform"
-            modules={{ UserPassForm: require('./auth/UserPassForm') }} //eslint-disable-line
-          >
-            {
-              ({ UserPassForm }) => UserPassForm && <UserPassForm {...routerProps} /> //eslint-disable-line
-            }
-          </CodeSplit>
-        }
+        render={(routerProps) => {
+          const AsyncComponent = createAsyncComponent({
+            resolve: () => System.import('./auth/UserPassForm'),
+          })
+          return <AsyncComponent {...routerProps} />
+        }}
       />
-
       <Match
         pattern="/signup"
         exactly
-        render={routerProps =>
-          <CodeSplit
-            chunkName="userpassform"
-            modules={{ UserPassForm: require('./auth/UserPassForm') }} //eslint-disable-line
-          >
-            {
-              ({ UserPassForm }) => UserPassForm && <UserPassForm {...routerProps} /> //eslint-disable-line
-            }
-          </CodeSplit>
-        }
+        render={(routerProps) => {
+          const AsyncComponent = createAsyncComponent({
+            resolve: () => System.import('./auth/UserPassForm'),
+          })
+          return <AsyncComponent {...routerProps} />
+        }}
       />
-
-      { /*
-      <Match pattern="/" exactly component={Introduction} />
-
-      <Match pattern="/login" exactly component={UserPassForm} />
-
-      <Match pattern="/signup" exactly component={UserPassForm} />
-      */
-      }
-
+      */ }
     </div>
   </div>
 )

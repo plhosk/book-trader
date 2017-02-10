@@ -1,56 +1,44 @@
-import { CodeSplitProvider } from 'code-split-component'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { AppContainer } from 'react-hot-loader'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import Redbox from 'redbox-react' // Remove in production build
+// import { withAsyncComponents } from 'react-async-component'
 
 import store from './store'
 import Root from './Root'
 
 injectTapEventPlugin()
 
-const RedboxWithConsole = ({ error }) => {
-  console.error(error) // eslint-disable-line
-  return <Redbox error={error} />
-}
-RedboxWithConsole.propTypes = {
-  error: React.PropTypes.instanceOf(Error).isRequired,
-}
-
-let errorReporter
-if (process.env.NODE_ENV === 'production') {
-  errorReporter = null
-} else {
-  errorReporter = RedboxWithConsole
-}
+delete AppContainer.prototype.unstable_handleError
 
 const rootElement = document.getElementById('app')
 
-ReactDOM.render(
-  <CodeSplitProvider>
-    <AppContainer errorReporter={errorReporter}>
+function renderApp(Param) {
+  const app = (
+    <AppContainer>
       <Provider store={store}>
-        <Root />
+        <Param />
       </Provider>
     </AppContainer>
-  </CodeSplitProvider>,
-  rootElement,
-)
+  )
+
+  // withAsyncComponents(app)
+  // .then(({ appWithAsyncComponents }) => {
+  ReactDOM.render(
+    // appWithAsyncComponents,
+    app,
+    rootElement,
+  )
+  // })
+}
+
+renderApp(Root)
 
 // Hot Module Replacement API
 if (module.hot) {
-  module.hot.accept('./Root', () => {
-    ReactDOM.render(
-      <CodeSplitProvider>
-        <AppContainer errorReporter={errorReporter}>
-          <Provider store={store}>
-            <Root />
-          </Provider>
-        </AppContainer>
-      </CodeSplitProvider>,
-      rootElement,
-    )
-  })
+  module.hot.accept(
+    './Root',
+    () => renderApp(Root),
+  )
 }

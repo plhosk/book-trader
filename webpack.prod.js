@@ -1,4 +1,4 @@
-const CodeSplitWebpackPlugin = require('code-split-component/webpack')
+// const CodeSplitWebpackPlugin = require('code-split-component/webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin') // eslint-disable-line
 
 const path = require('path')
@@ -48,7 +48,7 @@ const config = {
           options: {
             cacheDirectory: true,
             presets: [['es2015', { modules: false }], 'stage-0', 'react'],
-            plugins: ['code-split-component/babel'],
+            // plugins: ['code-split-component/babel'],
           },
         }],
       },
@@ -71,7 +71,7 @@ const config = {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest'],
     }),
-    new CodeSplitWebpackPlugin(),
+    // new CodeSplitWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'templates/index.ejs',
