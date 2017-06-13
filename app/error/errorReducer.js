@@ -3,7 +3,6 @@ export default function errorReducer(state = '', action) {
     case 'SHOW_ERROR_MESSAGE':
       return action.error
     case 'HIDE_ERROR_MESSAGE':
-    case 'NAVIGATE':
       return ''
     default:
       return state

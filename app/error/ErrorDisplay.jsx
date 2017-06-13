@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Paper from 'material-ui/Paper'
 import IconButton from 'material-ui/IconButton'
@@ -23,23 +24,38 @@ const styles = {
   },
 }
 
+let unlisten = null
 
-const ErrorDisplay = ({ error, dispatch }) => (
-  <div>
-    {error !== '' &&
-      <Paper style={styles.paper} zDepth={2}>
-        <span style={styles.title}>Error</span>
-        <span>{error}</span>
-        <IconButton onClick={() => { dispatch({ type: 'HIDE_ERROR_MESSAGE' }) }}>
-          <NavigationClose color={'#fff'} />
-        </IconButton>
-      </Paper>
-    }
-  </div>
-)
+const ErrorDisplay = ({ error, dispatch, history }) => {
+  if (typeof unlisten === 'function') {
+    unlisten()
+  }
+  if (error !== '') {
+    unlisten = history.listen(() => {
+      dispatch({ type: 'HIDE_ERROR_MESSAGE' })
+    })
+  }
+  return (
+    <div>
+      {error !== '' &&
+        <Paper style={styles.paper} zDepth={2}>
+          <span style={styles.title}>Error</span>
+          <span>{error}</span>
+          <IconButton onClick={() => { dispatch({ type: 'HIDE_ERROR_MESSAGE' }) }}>
+            <NavigationClose color={'#fff'} />
+          </IconButton>
+        </Paper>
+      }
+    </div>
+  )
+}
+
 ErrorDisplay.propTypes = {
   error: PropTypes.string,
   dispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    listen: PropTypes.func.isRequired,
+  }).isRequired,
 }
 
 ErrorDisplay.defaultProps = {

@@ -1,5 +1,7 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 
@@ -30,8 +32,11 @@ const styles = {
 
 const UserPassForm = (props) => {
   if (props.user) {
+    // return (
+    //   <h2>You are already logged in!</h2>
+    // )
     return (
-      <h2>You are already logged in!</h2>
+      <Redirect to="/" />
     )
   }
 
@@ -44,7 +49,7 @@ const UserPassForm = (props) => {
     e.preventDefault()
     const username = userInput.input.value
     const password = passInput.input.value
-    switch (props.pathname) {
+    switch (props.location.pathname) {
       case '/login':
         props.dispatch({ type: 'LOGIN_REQUEST', username, password })
         break
@@ -57,7 +62,7 @@ const UserPassForm = (props) => {
 
   let formTitle = ''
   let buttonLabel = ''
-  switch (props.pathname) {
+  switch (props.location.pathname) {
     case '/login':
       formTitle = 'Log in'
       buttonLabel = 'Log in'
@@ -107,8 +112,10 @@ const UserPassForm = (props) => {
 
 UserPassForm.propTypes = {
   user: PropTypes.objectOf(PropTypes.string),
-  pathname: PropTypes.string.isRequired,
-  // dispatch: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 }
 
 UserPassForm.defaultProps = {

@@ -16,11 +16,9 @@ const userSchema = mongoose.Schema({
   github: {
     username: {
       type: String,
-      unique: true,
     },
     id: {
       type: Number,
-      unique: true,
     },
   },
   createdAt: {

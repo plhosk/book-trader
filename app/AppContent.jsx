@@ -1,5 +1,5 @@
 import React from 'react'
-import { Match } from 'react-router'
+import { Route } from 'react-router-dom'
 // import { createAsyncComponent } from 'react-async-component'
 
 import TopBar from './TopBar'
@@ -17,44 +17,12 @@ const styles = {
 
 const AppContent = () => (
   <div>
-    <TopBar />
+    <Route path="/" component={TopBar} />
     <div style={styles.appContent}>
-      <ErrorDisplay />
-      <Match pattern="/" exactly component={Introduction} />
-      <Match pattern="/login" exactly component={UserPassForm} />
-      <Match pattern="/signup" exactly component={UserPassForm} />
-      { /*
-      <Match
-        pattern="/"
-        exactly
-        render={() => {
-          const AsyncComponent = createAsyncComponent({
-            resolve: () => System.import('./Introduction'),
-          })
-          return <AsyncComponent />
-        }}
-      />
-      <Match
-        pattern="/login"
-        exactly
-        render={(routerProps) => {
-          const AsyncComponent = createAsyncComponent({
-            resolve: () => System.import('./auth/UserPassForm'),
-          })
-          return <AsyncComponent {...routerProps} />
-        }}
-      />
-      <Match
-        pattern="/signup"
-        exactly
-        render={(routerProps) => {
-          const AsyncComponent = createAsyncComponent({
-            resolve: () => System.import('./auth/UserPassForm'),
-          })
-          return <AsyncComponent {...routerProps} />
-        }}
-      />
-      */ }
+      <Route path="/" component={ErrorDisplay} />
+      <Route path="/" exact component={Introduction} />
+      <Route path="/login" exact component={UserPassForm} />
+      <Route path="/signup" exact component={UserPassForm} />
     </div>
   </div>
 )

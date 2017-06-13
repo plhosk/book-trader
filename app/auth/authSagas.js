@@ -43,6 +43,11 @@ function* signupRequest(action) {
   const { success, error } = yield call(api.signupFetch, action.username, action.password)
   if (success) {
     yield put({ type: 'SIGNUP_SUCCESS' })
+    yield put({
+      type: 'LOGIN_REQUEST',
+      username: action.username,
+      password: action.password,
+    })
   } else {
     yield put({ type: 'SIGNUP_FAILED', error })
     yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Signup failed. Username may be taken.' })

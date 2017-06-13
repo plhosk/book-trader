@@ -1,9 +1,9 @@
-import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
-import IconButton from 'material-ui/IconButton'
 import MapsLocalLibrary from 'material-ui/svg-icons/maps/local-library'
 import ActionAccountBox from 'material-ui/svg-icons/action/account-box'
 import ActionPermIdentity from 'material-ui/svg-icons/action/perm-identity'
@@ -39,7 +39,7 @@ const styles = {
 
 class TopBar extends React.Component {
   componentWillMount() {
-    // Refresh user state when loading page (including after login redirect)
+    // Refresh user state when loading component (including after login redirect)
     this.props.dispatch({ type: 'USER_OBJECT_REQUEST' })
   }
 
@@ -50,15 +50,16 @@ class TopBar extends React.Component {
       <AppBar
         style={styles.appBar}
         iconElementLeft={
-          <IconButton
-            onClick={() => dispatch({
-              type: 'NAVIGATE',
-              location: { pathname: '/' },
-              action: 'PUSH',
-            })}
-          >
-            <MapsLocalLibrary />
-          </IconButton>
+          <Link to={'/'}>
+            <FlatButton
+              style={styles.button}
+              labelPosition={'after'}
+              icon={<MapsLocalLibrary />}
+              label={<span style={styles.buttonText}>
+                Home
+              </span>}
+            />
+          </Link>
         }
         iconElementRight={
           <span style={styles.rightSpan}>
@@ -115,7 +116,7 @@ class TopBar extends React.Component {
 }
 
 TopBar.propTypes = {
-  user: PropTypes.objectOf(React.PropTypes.string),
+  user: PropTypes.objectOf(PropTypes.string),
   dispatch: PropTypes.func.isRequired,
 }
 

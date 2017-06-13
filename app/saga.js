@@ -1,4 +1,4 @@
-import { take, select } from 'redux-saga/effects'
+import { take, select, all } from 'redux-saga/effects'
 
 import authSagas from './auth/authSagas'
 // import booksSagas from './books/booksSagas'
@@ -13,9 +13,9 @@ function* logActions() {
 }
 
 export default function* rootSaga() {
-  yield [
+  yield all([
     logActions(),
     authSagas(),
     // booksSagas(),
-  ]
+  ])
 }

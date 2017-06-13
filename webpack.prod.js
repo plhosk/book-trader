@@ -20,7 +20,6 @@ const config = {
       'react-redux',
       'react-router',
       'redux-saga',
-      'history',
       'inline-style-prefixer',
       'lodash.merge',
       'core-js',
