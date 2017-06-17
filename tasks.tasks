@@ -1,0 +1,13 @@
+Task list
+
+Client:
+  ☐ Specify redux store data structure
+  ☐ Write client API fetches
+  ☐ Write client sagas
+  ☐ Think about ways to simplify client structure
+  ☐ Write react components
+  ☐ Ctrl-Enter for new, Alt-d to toggle done, Alt-c to cancel @critical @high @low @today
+
+Server:
+  ☐ Do testing of API and security
+  ☐ Wipe database
