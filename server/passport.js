@@ -1,7 +1,7 @@
 /* eslint-disable prefer-arrow-callback, func-names */
 
 const passport = require('passport')
-const User = require('./models/user')
+const User = require('./schemas/user')
 
 const LocalStrategy = require('passport-local').Strategy
 

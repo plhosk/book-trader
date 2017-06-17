@@ -11,6 +11,7 @@ const config = {
   entry: {
     main: [
       'babel-polyfill',
+      'isomorphic-fetch',
       './app/App.jsx',
     ],
     vendor: [

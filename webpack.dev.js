@@ -8,6 +8,7 @@ const buildPath = path.join(__dirname, '/public')
 const config = {
   entry: [
     'babel-polyfill',
+    'isomorphic-fetch',
     'react-hot-loader/patch',
     'webpack-hot-middleware/client',
     './app/App.jsx',

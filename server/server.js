@@ -1,5 +1,3 @@
-require('es6-promise').polyfill()
-require('isomorphic-fetch')
 require('dotenv').config()
 const express = require('express')
 const historyApiFallback = require('connect-history-api-fallback')
@@ -57,6 +55,14 @@ app.use('/api/github/callback', require('./api/github'))
 app.use('/api/signup', require('./api/signup'))
 app.use('/api/login', require('./api/login'))
 app.use('/api/logout', require('./api/logout'))
+app.use('/api/books', require('./api/books'))
+app.use('/api/offers', require('./api/offers'))
+app.use('/api/users', require('./api/users'))
+
+// error handler
+app.use((err, req, res) => {
+  res.status(err.statusCode || 500).json(err)
+})
 
 // Handle 404 (incl. client-side routes) by redirecting to index.html
 app.use(historyApiFallback())

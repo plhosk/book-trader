@@ -1,6 +1,7 @@
 /* eslint-disable func-names, prefer-arrow-callback, no-underscore-dangle */
 
 const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')
 const bcrypt = require('bcrypt-nodejs')
 
 const userSchema = mongoose.Schema({
@@ -26,9 +27,10 @@ const userSchema = mongoose.Schema({
     default: Date.now,
   },
   displayName: String,
-  city: String,
-  country: String,
 })
+
+userSchema.plugin(AutoIncrement, { inc_field: 'userId' })
+
 
 const SALT_FACTOR = 10
 
@@ -62,8 +64,17 @@ userSchema.methods.name = function () {
   return this.displayName || this.github.username || this.local.username
 }
 
-userSchema.methods.getId = function () {
-  return this._id
+// userSchema.methods.getId = function () {
+//   return this._id
+// }
+
+userSchema.methods.toJson = function () {
+  return {
+    userId: this.userId,
+    name: this.name,
+    city: this.city || '',
+    country: this.country || '',
+  }
 }
 
 module.exports = mongoose.model('User', userSchema)

@@ -28,12 +28,12 @@
     "cross-env": "^5.0.1",
     "debug": "^2.3.3",
     "dotenv": "^4.0.0",
-    "es6-promise": "^4.0.5",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "isomorphic-fetch": "^2.2.1",
     "material-ui": "^0.18.3",
     "mongoose": "^4.7.5",
+    "mongoose-sequence": "^3.2.0",
     "passport": "^0.3.2",
     "passport-github2": "^0.1.10",
     "passport-local": "^1.0.0",
@@ -46,7 +46,8 @@
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-saga": "^0.15.3",
-    "serve-favicon": "^2.3.2"
+    "serve-favicon": "^2.3.2",
+    "validator": "^7.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.20.0",

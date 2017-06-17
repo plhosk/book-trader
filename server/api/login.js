@@ -36,7 +36,9 @@ router.route('/')
         username: req.user.name(),
       })
     } else {
-      res.sendStatus(204) // user not authenticated. send 204 (no content)
+      res.status(204).send({
+        message: 'User not authenticated.',
+      }) // user not authenticated. send 204 (no content)
     }
   })
 
