@@ -71,7 +71,7 @@ userSchema.methods.name = function () {
 userSchema.methods.toJson = function () {
   return {
     userId: this.userId,
-    name: this.name,
+    name: this.name(),
     city: this.city || '',
     country: this.country || '',
   }

@@ -35,7 +35,7 @@ router.route('/:bookId')
     res.send(req.book.toJson()) // Already fetched book, just send it
   })
   .delete((req, res) => {
-    if (!req.isAuthenticated() || !req.user || req.book.ownerId !== req.user._id) {
+    if (!req.isAuthenticated() || !req.user || req.book.ownerId !== req.user.userId) {
       return res.sendStatus(401)
     }
     req.book.deleted = true
@@ -92,7 +92,7 @@ router.route('/')
         // book.thumbnail = json.items[0].volumeInfo.imageLinks.thumbnail
         // use covers from openlibrary.org
         book.thumbnail = `https://covers.openlibrary.org/b/ISBN/${isbn}-M.jpg`
-        book.ownerId = req.user._id // this is the database _id string
+        book.ownerId = req.user.userId // this is the database _id string
         return book.save()
           .then(() => {
             debug(book.toJson())

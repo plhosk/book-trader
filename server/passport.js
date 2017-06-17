@@ -67,7 +67,7 @@ function (accessToken, refreshToken, profile, done) {
 
 module.exports = () => {
   passport.serializeUser((user, done) => {
-    done(null, user._id) //eslint-disable-line
+    done(null, user._id) // eslint-disable-line
   })
   passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => {
