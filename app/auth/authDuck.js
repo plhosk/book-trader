@@ -1,5 +1,18 @@
 import { call, put, takeLatest, takeEvery } from 'redux-saga/effects'
 
+const authReducer = (state = {}, action) => {
+  switch (action.type) {
+    case 'LOAD_USER_OBJECT':
+      return {
+        user: action.user,
+      }
+    case 'LOGOUT_SUCCESS':
+      return {}
+    default:
+      return state
+  }
+}
+
 const userObjectFetch = () => (
   fetch('/api/login', {
     credentials: 'same-origin',
@@ -123,9 +136,11 @@ function* signupRequest(action) {
   }
 }
 
-export default function* authSagas() {
+function* authSagas() {
   yield takeEvery('USER_OBJECT_REQUEST', userObjectRequest)
   yield takeEvery('LOGOUT_REQUEST', logoutRequest)
   yield takeLatest('LOGIN_REQUEST', loginRequest)
   yield takeLatest('SIGNUP_REQUEST', signupRequest)
 }
+
+export { authReducer, authSagas }
