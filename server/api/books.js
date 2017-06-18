@@ -50,10 +50,10 @@ router.route('/')
     Book.find({
       deleted: false,
     })
-      .select('-_id bookId title authors publishedDate thumbnail creationDate deleted')
+      .select('-_id bookId title authors publishedDate thumbnail ownerId creationDate deleted')
       .sort('-creationDate')
       .then((bookList) => {
-        debug(bookList)
+        // debug(bookList)
         res.status(200).json(bookList)
       })
       .catch((err) => {
@@ -73,31 +73,37 @@ router.route('/')
       debug('Invalid ISBN')
       return res.status(400).send({ message: 'Invalid ISBN' })
     }
-    return fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
-    // return fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=data&format=json`)
+    // return fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+    return fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=data&format=json`)
       .then(response => response.json())
       .then((json) => {
-        // debug(JSON.stringify(json, null, 2))
-        if (json.totalItems === 0) {
+        const key = `ISBN:${isbn}`
+        debug('Book received from external API')
+        debug(JSON.stringify(json, null, 2))
+        if (!json[key]) {
+        // if (json.totalItems === 0) {
           return res.status(404).send({
             message: 'Book not found, try a different ISBN',
           })
         }
-        debug(`Book found: ${json.items[0].volumeInfo.title}`)
+        // debug(`Book found: ${json.items[0].volumeInfo.title}`)
+        debug(`Book found: ${json[key].title}`)
         const book = new Book()
         // const key = `ISBN:${isbn}`
         // book.title = json[key].title
         // book.author = json[key].authors[0].name
         // book.publishedDate = json[key].publish_date
-        book.title = json.items[0].volumeInfo.title
-        book.authors = [...json.items[0].volumeInfo.authors]
-        book.publishedDate = json.items[0].volumeInfo.publishedDate
+        book.title = json[key].title
+        // book.authors = [...json.items[0].volumeInfo.authors]
+        book.authors = [json[key].authors[0].name]
+        book.publishedDate = json[key].publish_date
         // book.thumbnail = json.items[0].volumeInfo.imageLinks.thumbnail
         // use covers from openlibrary.org
         book.thumbnail = `https://covers.openlibrary.org/b/ISBN/${isbn}-M.jpg`
         book.ownerId = req.user.userId // this is the database _id string
         return book.save()
           .then(() => {
+            debug('Saved book to DB:')
             debug(book.toJson())
             return res.send(book.toJson())
           }) // run schema method to get book object

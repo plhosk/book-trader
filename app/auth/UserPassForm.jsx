@@ -51,10 +51,10 @@ const UserPassForm = (props) => {
     const password = passInput.input.value
     switch (props.location.pathname) {
       case '/login':
-        props.dispatch({ type: 'LOGIN_REQUEST', username, password })
+        props.dispatch({ type: 'AUTH_LOGIN_REQUEST', username, password })
         break
       case '/signup':
-        props.dispatch({ type: 'SIGNUP_REQUEST', username, password })
+        props.dispatch({ type: 'AUTH_SIGNUP_REQUEST', username, password })
         break
       default:
     }

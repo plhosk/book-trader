@@ -1,19 +1,24 @@
 import { call, put, takeLatest, takeEvery } from 'redux-saga/effects'
 
+// Redux reducer
 const authReducer = (state = {}, action) => {
   switch (action.type) {
-    case 'USER_OBJECT_UPDATE_STORE':
+    case 'AUTH_USER_OBJECT_RECEIVED':
       return {
         user: action.user,
       }
-    case 'USER_OBJECT_CLEAR':
+    case 'AUTH_USER_OBJECT_CLEAR':
       return {}
     default:
       return state
   }
 }
 
-const userObjectFetch = () => (
+/**
+ * Fetch-saga pairs
+ */
+
+const authUserObjectFetch = () => (
   fetch('/api/login', {
     credentials: 'same-origin',
     method: 'GET',
@@ -30,20 +35,20 @@ const userObjectFetch = () => (
   })
   .catch(error => ({ error }))
 )
-
-function* userObjectRequest() {
-  const { response, error } = yield call(userObjectFetch)
+function* authUserObjectRequest() {
+  const { response, error } = yield call(authUserObjectFetch)
   if (response === 'empty') {
-    yield put({ type: 'USER_OBJECT_EMPTY' })
+    yield put({ type: 'AUTH_USER_OBJECT_EMPTY' })
   } else if (response) {
-    yield put({ type: 'USER_OBJECT_UPDATE_STORE', user: response })
+    yield put({ type: 'AUTH_USER_OBJECT_RECEIVED', user: response })
   } else {
-    yield put({ type: 'USER_OBJECT_ERROR', error })
-    yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Error getting user object.' })
+    yield put({ type: 'AUTH_USER_OBJECT_ERROR', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Error getting user object.' })
   }
 }
 
-const logoutFetch = () => (
+
+const authLogoutFetch = () => (
   fetch('/api/logout', {
     credentials: 'same-origin',
     method: 'DELETE',
@@ -56,18 +61,18 @@ const logoutFetch = () => (
   })
   .catch(error => ({ error }))
 )
-
-function* logoutRequest() {
-  const { success, error } = yield call(logoutFetch)
+function* authLogoutRequest() {
+  const { success, error } = yield call(authLogoutFetch)
   if (success) {
-    yield put({ type: 'USER_OBJECT_CLEAR' })
+    yield put({ type: 'AUTH_USER_OBJECT_CLEAR' })
   } else {
-    yield put({ type: 'LOGOUT_FAILED', error })
-    yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Logout failed.' })
+    yield put({ type: 'AUTH_LOGOUT_FAILED', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Logout failed.' })
   }
 }
 
-const loginFetch = (username, password) => (
+
+const authLoginFetch = (username, password) => (
   fetch('/api/login', {
     credentials: 'same-origin',
     method: 'POST',
@@ -88,18 +93,18 @@ const loginFetch = (username, password) => (
   })
   .catch(error => ({ error }))
 )
-
-function* loginRequest(action) {
-  const { response, error } = yield call(loginFetch, action.username, action.password)
+function* authLoginRequest(action) {
+  const { response, error } = yield call(authLoginFetch, action.username, action.password)
   if (response) {
-    yield put({ type: 'USER_OBJECT_UPDATE_STORE', user: response })
+    yield put({ type: 'AUTH_USER_OBJECT_RECEIVED', user: response })
   } else {
-    yield put({ type: 'LOGIN_FAILED', error })
-    yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Login failed. Username or password may be incorrect.' })
+    yield put({ type: 'AUTH_LOGIN_FAILED', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Login failed. Username or password may be incorrect.' })
   }
 }
 
-const signupFetch = (username, password) => (
+
+const authSignupFetch = (username, password) => (
   fetch('/api/signup', {
     method: 'POST',
     headers: {
@@ -118,26 +123,28 @@ const signupFetch = (username, password) => (
   })
   .catch(error => ({ error }))
 )
-
-function* signupRequest(action) {
-  const { success, error } = yield call(signupFetch, action.username, action.password)
+function* authSignupRequest(action) {
+  const { success, error } = yield call(authSignupFetch, action.username, action.password)
   if (success) {
     yield put({
-      type: 'LOGIN_REQUEST',
+      type: 'AUTH_LOGIN_REQUEST',
       username: action.username,
       password: action.password,
     })
   } else {
-    yield put({ type: 'SIGNUP_FAILED', error })
-    yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Signup failed. Username may be taken.' })
+    yield put({ type: 'AUTH_SIGNUP_FAILED', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Signup failed. Username may be taken.' })
   }
 }
 
+/**
+ * Saga initialize function
+ */
 function* authSagas() {
-  yield takeEvery('USER_OBJECT_REQUEST', userObjectRequest)
-  yield takeEvery('LOGOUT_REQUEST', logoutRequest)
-  yield takeLatest('LOGIN_REQUEST', loginRequest)
-  yield takeLatest('SIGNUP_REQUEST', signupRequest)
+  yield takeEvery('AUTH_USER_OBJECT_REQUEST', authUserObjectRequest)
+  yield takeEvery('AUTH_LOGOUT_REQUEST', authLogoutRequest)
+  yield takeLatest('AUTH_LOGIN_REQUEST', authLoginRequest)
+  yield takeLatest('AUTH_SIGNUP_REQUEST', authSignupRequest)
 }
 
 export { authReducer, authSagas }

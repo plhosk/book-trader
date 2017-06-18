@@ -32,7 +32,7 @@ const ErrorDisplay = ({ error, dispatch, history }) => {
   }
   if (error !== '') {
     unlisten = history.listen(() => {
-      dispatch({ type: 'HIDE_ERROR_MESSAGE' })
+      dispatch({ type: 'ERROR_MESSAGE_HIDE' })
     })
   }
   return (
@@ -41,7 +41,7 @@ const ErrorDisplay = ({ error, dispatch, history }) => {
         <Paper style={styles.paper} zDepth={2}>
           <span style={styles.title}>Error</span>
           <span>{error}</span>
-          <IconButton onClick={() => { dispatch({ type: 'HIDE_ERROR_MESSAGE' }) }}>
+          <IconButton onClick={() => { dispatch({ type: 'ERROR_MESSAGE_HIDE' }) }}>
             <NavigationClose color={'#fff'} />
           </IconButton>
         </Paper>

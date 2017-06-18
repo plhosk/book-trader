@@ -30,7 +30,8 @@ class IsbnForm extends React.Component {
   }
 
   handleSubmit(event) {
-    alert(`An ISBN was submitted: ${this.state.value}`) // eslint-disable-line no-alert
+    this.props.dispatch({ type: 'BOOK_ADD_REQUEST', isbn: this.state.value })
+    // alert(`An ISBN was submitted: ${this.state.value}`) // eslint-disable-line no-alert
     event.preventDefault()
   }
   render() {
@@ -68,7 +69,8 @@ class IsbnForm extends React.Component {
 
 
 IsbnForm.propTypes = {
-  user: PropTypes.objectOf(PropTypes.string),
+  user: PropTypes.shape({}),
+  dispatch: PropTypes.func.isRequired,
 }
 
 IsbnForm.defaultProps = {

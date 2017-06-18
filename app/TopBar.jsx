@@ -40,7 +40,7 @@ const styles = {
 class TopBar extends React.Component {
   componentWillMount() {
     // Refresh user state when loading component (including after login redirect)
-    this.props.dispatch({ type: 'USER_OBJECT_REQUEST' })
+    this.props.dispatch({ type: 'AUTH_USER_OBJECT_REQUEST' })
   }
 
   render() {
@@ -83,7 +83,7 @@ class TopBar extends React.Component {
                     label={<span style={styles.buttonText}>
                       Log Out
                     </span>}
-                    onClick={() => dispatch({ type: 'LOGOUT_REQUEST' })}
+                    onClick={() => dispatch({ type: 'AUTH_LOGOUT_REQUEST' })}
                   />
                 </Link>
               </div>
@@ -116,7 +116,9 @@ class TopBar extends React.Component {
 }
 
 TopBar.propTypes = {
-  user: PropTypes.objectOf(PropTypes.string),
+  user: PropTypes.shape({
+    name: PropTypes.string,
+  }),
   dispatch: PropTypes.func.isRequired,
 }
 

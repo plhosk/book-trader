@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux'
 import { take, select, all } from 'redux-saga/effects'
 
-import errorReducer from './error/errorReducer'
+import { errorReducer } from './error/errorDuck'
 import { authReducer, authSagas } from './auth/authDuck'
 import { booksReducer, booksSagas } from './books/booksDuck'
 import { offersReducer, offersSagas } from './offers/offersDuck'
 
+// Define redux store
 const initialState = {
   error: '',
   auth: {},
@@ -26,7 +27,10 @@ const rootReducer = combineReducers({
   offers: offersReducer,
 })
 
-// Log every Redux action
+// ---------------------------------------------------------
+// Initialize sagas
+
+// Log every redux action
 function* logActions() {
   while (true) { //eslint-disable-line
     const action = yield take()

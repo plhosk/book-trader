@@ -1,8 +1,9 @@
 import { call, put, takeEvery } from 'redux-saga/effects' // takeLatest,
 
-const offersReducer = (state = {}, action) => {
+// Redux reducer
+const offersReducer = (state = { byId: {}, allIds: [] }, action) => {
   switch (action.type) {
-    case 'OFFER_LIST_UPDATE_STORE': {
+    case 'OFFER_LIST_RECEIVED': {
       // offerList is an ordered array of book entries. Change to normalized state shape
       const byId = {}
       const allIds = []
@@ -15,7 +16,7 @@ const offersReducer = (state = {}, action) => {
         allIds,
       }
     }
-    case 'ADD_OFFER_UPDATE_STORE': {
+    case 'OFFER_ADD_CONFIRMED': {
       return {
         ...state,
         byId: {
@@ -28,26 +29,15 @@ const offersReducer = (state = {}, action) => {
         ],
       }
     }
-    case 'CANCEL_OFFER_UPDATE_STORE': {
+    case 'OFFER_STATUS_UPDATE_CONFIRMED': {
+      // action.newStatus = { (accepted || cancelled || rejected): (true || false)
       return {
         ...state,
         byId: {
           ...state.byId,
           [action.offerId]: {
             ...state.byId[action.offerId],
-            cancelled: true,
-          },
-        },
-      }
-    }
-    case 'REJECT_OFFER_UPDATE_STORE': {
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [action.offerId]: {
-            ...state.byId[action.offerId],
-            rejected: true,
+            ...action.newStatus,
           },
         },
       }
@@ -57,6 +47,9 @@ const offersReducer = (state = {}, action) => {
   }
 }
 
+/**
+ * Fetch-Saga pairs
+ */
 
 const offerListFetch = () => (
   fetch('/api/offers', {
@@ -76,13 +69,13 @@ const offerListFetch = () => (
 function* offerListRequest() {
   const { response, error } = yield call(offerListFetch)
   if (response) {
-    yield put({ type: 'OFFER_LIST_UPDATE_STORE', offerList: response })
+    yield put({ type: 'OFFER_LIST_RECEIVED', offerList: response })
   } else {
     yield put({ type: 'OFFER_LIST_REQUEST_ERROR', error })
   }
 }
 
-const addOfferFetch = offerRequest => (
+const offerAddFetch = offerRequest => (
   fetch('/api/offers', {
     credentials: 'same-origin',
     method: 'POST',
@@ -103,16 +96,16 @@ const addOfferFetch = offerRequest => (
   .catch(error => ({ error }))
 )
 
-function* addOfferRequest(action) {
-  const { response, error } = yield call(addOfferFetch, action.offerRequest)
+function* offerAddRequest(action) {
+  const { response, error } = yield call(offerAddFetch, action.offerRequest)
   if (response) {
-    yield put({ type: 'ADD_OFFER_UPDATE_STORE', offer: response })
+    yield put({ type: 'OFFER_ADD_CONFIRMED', offer: response })
   } else {
-    yield put({ type: 'ADD_OFFER_REQUEST_ERROR', error })
+    yield put({ type: 'OFFER_ADD_REQUEST_ERROR', error })
   }
 }
 
-const acceptOfferFetch = offerId => (
+const offerAcceptFetch = offerId => (
   fetch(`/api/offers/${offerId}`, {
     credentials: 'same-origin',
     method: 'PUT',
@@ -126,16 +119,20 @@ const acceptOfferFetch = offerId => (
   .catch(error => ({ error }))
 )
 
-function* acceptOfferRequest(action) {
-  const { response, error } = yield call(acceptOfferFetch, action.offerId)
+function* offerAcceptRequest(action) {
+  const { response, error } = yield call(offerAcceptFetch, action.offerId)
   if (response) {
-    yield put({ type: 'ACCEPT_OFFER_UPDATE_STORE', offerId: action.offerId })
+    yield put({
+      type: 'OFFER_STATUS_UPDATE_CONFIRMED',
+      offerId: action.offerId,
+      newStatus: { accepted: true },
+    })
   } else {
-    yield put({ type: 'ACCEPT_OFFER_REQUEST_ERROR', error })
+    yield put({ type: 'OFFER_ACCEPT_REQUEST_ERROR', error })
   }
 }
 
-const cancelRejectOfferFetch = offerId => (
+const offerCancelRejectFetch = offerId => (
   fetch(`/api/offers/${offerId}`, {
     credentials: 'same-origin',
     method: 'DELETE',
@@ -150,22 +147,31 @@ const cancelRejectOfferFetch = offerId => (
   .catch(error => ({ error }))
 )
 
-function* cancelRejectOfferRequest(action) {
-  const { response, error } = yield call(cancelRejectOfferFetch, action.offerId)
-  if (response.actionTaken === 'cancelled') {
-    yield put({ type: 'CANCEL_OFFER_UPDATE_STORE', offerId: action.offerId })
-  } else if (response.actionTaken === 'rejected') {
-    yield put({ type: 'REJECT_OFFER_UPDATE_STORE', offerId: action.offerId })
+function* offerCancelRejectRequest(action) {
+  const { response, error } = yield call(offerCancelRejectFetch, action.offerId)
+  if (response && response.actionTaken === 'cancelled') {
+    yield put({
+      type: 'OFFER_STATUS_UPDATE_CONFIRMED',
+      offerId: action.offerId,
+      newStatus: { cancelled: true },
+    })
+  } else if (response && response.actionTaken === 'rejected') {
+    yield put({
+      type: 'OFFER_STATUS_UPDATE_CONFIRMED',
+      offerId: action.offerId,
+      newStatus: { rejected: true },
+    })
   } else {
-    yield put({ type: 'CANCEL_REJECT_OFFER_REQUEST_ERROR', error })
+    yield put({ type: 'OFFER_CANCEL_REJECT_REQUEST_ERROR', error })
   }
 }
 
+// Sagas initialization function
 function* offersSagas() {
   yield takeEvery('OFFER_LIST_REQUEST', offerListRequest)
-  yield takeEvery('ADD_OFFER_REQUEST', addOfferRequest)
-  yield takeEvery('ACCEPT_OFFER_REQUEST', acceptOfferRequest)
-  yield takeEvery('CANCEL_REJECT_OFFER_REQUEST', cancelRejectOfferRequest)
+  yield takeEvery('OFFER_ADD_REQUEST', offerAddRequest)
+  yield takeEvery('OFFER_ACCEPT_REQUEST', offerAcceptRequest)
+  yield takeEvery('OFFER_CANCEL_REJECT_REQUEST', offerCancelRejectRequest)
 }
 
 export { offersReducer, offersSagas }

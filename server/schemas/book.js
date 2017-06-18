@@ -6,7 +6,7 @@ const bookSchema = mongoose.Schema({
   authors: [String],
   publishedDate: String,
   thumbnail: String,
-  ownerId: String,
+  ownerId: Number,
   creationDate: { type: Date, default: Date.now },
   deleted: { type: Boolean, default: false },
 })
@@ -23,7 +23,7 @@ bookSchema.methods.toJson = function () {
     authors: [...this.authors],
     publishedDate: this.publishedDate,
     thumbnail: this.thumbnail,
-    ownerId: String, // Exclude sending ownerId
+    ownerId: this.ownerId, // Exclude sending ownerId
     creationDate: this.creationDate,
     deleted: this.deleted,
   }
