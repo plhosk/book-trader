@@ -14,6 +14,7 @@ const router = express.Router({ mergeParams: true })
 router.param('bookId', (req, res, next, bookId) => {
   debug(`Received API request for book ${bookId}`)
   Book.findOne({ bookId })
+    // .select('-_id bookId title authors publishedDate thumbnail creationDate deleted')
     .then((book) => {
       if (book === null) {
         return res.status(404).send({
@@ -30,10 +31,10 @@ router.param('bookId', (req, res, next, bookId) => {
 })
 
 router.route('/:bookId')
-  .get((req, res) => {
-    debug('sending book')
-    res.send(req.book.toJson()) // Already fetched book, just send it
-  })
+  // .get((req, res) => {
+  //   debug('sending book')
+  //   res.send(req.book.toJson()) // Already fetched book, just send it
+  // })
   .delete((req, res) => {
     if (!req.isAuthenticated() || !req.user || req.book.ownerId !== req.user.userId) {
       return res.sendStatus(401)
@@ -49,9 +50,10 @@ router.route('/')
     Book.find({
       deleted: false,
     })
-      // .select('bookId title authors publishedDate thumbnail creationDate deleted')
+      .select('-_id bookId title authors publishedDate thumbnail creationDate deleted')
       .sort('-creationDate')
       .then((bookList) => {
+        debug(bookList)
         res.status(200).json(bookList)
       })
       .catch((err) => {
@@ -59,6 +61,7 @@ router.route('/')
         next(err)
       })
   })
+
   .post((req, res, next) => {
     if (!req.isAuthenticated() || !req.user) {
       return res.sendStatus(401)

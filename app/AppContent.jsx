@@ -1,10 +1,12 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 // import { createAsyncComponent } from 'react-async-component'
 
 import TopBar from './TopBar'
 import ErrorDisplay from './error/ErrorDisplay'
 import Introduction from './Introduction'
+import IsbnForm from './books/IsbnForm'
+import BookList from './books/BookList'
 import UserPassForm from './auth/UserPassForm'
 
 const styles = {
@@ -17,12 +19,16 @@ const styles = {
 
 const AppContent = () => (
   <div>
-    <Route path="/" component={TopBar} />
+    <Route component={TopBar} />
     <div style={styles.appContent}>
-      <Route path="/" component={ErrorDisplay} />
-      <Route path="/" exact component={Introduction} />
-      <Route path="/login" exact component={UserPassForm} />
-      <Route path="/signup" exact component={UserPassForm} />
+      <Route component={ErrorDisplay} />
+      <Switch>
+        <Route path="/" exact component={Introduction} />
+        <Route path="/login" component={UserPassForm} />
+        <Route path="/signup" component={UserPassForm} />
+      </Switch>
+      <Route component={IsbnForm} />
+      <Route component={BookList} />
     </div>
   </div>
 )

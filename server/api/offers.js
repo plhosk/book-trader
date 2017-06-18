@@ -29,10 +29,10 @@ router.param('offerId', (req, res, next, offerId) => {
 
 router.route('/:offerId')
   // View an offer
-  .get((req, res) => {
-    debug('sending offer')
-    res.send(req.offer.toJson()) // Already fetched offer, just send it
-  })
+  // .get((req, res) => {
+  //   debug('sending offer')
+  //   res.send(req.offer.toJson()) // Already fetched offer, just send it
+  // })
   // Target accepts an offer
   .put((req, res) => {
     if (!req.isAuthenticated() || !req.user) {
@@ -61,12 +61,12 @@ router.route('/:offerId')
     }
     req.offer.deleted = true
     return req.offer.save().then(() => {
-      res.sendStatus(200)
+      const actionTaken = req.user.userId === req.offer.originatingUserId ? 'cancelled' : 'rejected'
+      res.status(200).send({ actionTaken })
     })
   })
 
 router.route('/')
-
   // Get list of all offers pertaining to user (originating or target)
   .get((req, res, next) => {
     if (!req.isAuthenticated() || !req.user) {
@@ -78,7 +78,7 @@ router.route('/')
         { targetUserId: req.user.userId },
       ],
     })
-      // .select('offerId originatingBookIds targetBookIds offerDate cancelled rejected accepted')
+      .select('-_id offerId originatingUserId targetUserId originatingBookIds targetBookIds offerDate cancelled rejected accepted')
       .sort('-offerDate')
       .then((offerList) => {
         res.status(200).json(offerList)
@@ -96,9 +96,9 @@ router.route('/')
     debug('add trade offer')
     const offer = new Offer()
     offer.originatingUserId = req.user.userId
-    offer.targetUserId = req.body.targetUserId
-    offer.originatingBookIds = [...req.body.originatingBookIds]
-    offer.targetBookIds = [...req.body.originatingBookIds]
+    offer.targetUserId = req.body.offerRequest.targetUserId
+    offer.originatingBookIds = [...req.body.offerRequest.originatingBookIds]
+    offer.targetBookIds = [...req.body.offerRequest.originatingBookIds]
     return offer.save()
       .then(() => {
         debug(offer.toJson())

@@ -1,12 +1,25 @@
-/* eslint-disable no-constant-condition */
-
 import { call, put, takeLatest, takeEvery } from 'redux-saga/effects'
 
-import api from '../api'
-
+const userObjectFetch = () => (
+  fetch('/api/login', {
+    credentials: 'same-origin',
+    method: 'GET',
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json()
+      .then(json => ({ response: json }))
+    }
+    if (response.status === 204) {
+      return { response: 'empty' }
+    }
+    return { error: response }
+  })
+  .catch(error => ({ error }))
+)
 
 function* userObjectRequest() {
-  const { response, error } = yield call(api.userObjectFetch)
+  const { response, error } = yield call(userObjectFetch)
   if (response === 'empty') {
     yield put({ type: 'USER_OBJECT_EMPTY' })
   } else if (response) {
@@ -18,8 +31,22 @@ function* userObjectRequest() {
   }
 }
 
+const logoutFetch = () => (
+  fetch('/api/logout', {
+    credentials: 'same-origin',
+    method: 'DELETE',
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return { success: true }
+    }
+    return { error: response }
+  })
+  .catch(error => ({ error }))
+)
+
 function* logoutRequest() {
-  const { success, error } = yield call(api.logoutFetch)
+  const { success, error } = yield call(logoutFetch)
   if (success) {
     yield put({ type: 'LOGOUT_SUCCESS' })
   } else {
@@ -28,8 +55,30 @@ function* logoutRequest() {
   }
 }
 
+const loginFetch = (username, password) => (
+  fetch('/api/login', {
+    credentials: 'same-origin',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username,
+      password,
+    }),
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json()
+      .then(json => ({ response: json }))
+    }
+    return { error: response }
+  })
+  .catch(error => ({ error }))
+)
+
 function* loginRequest(action) {
-  const { response, error } = yield call(api.loginFetch, action.username, action.password)
+  const { response, error } = yield call(loginFetch, action.username, action.password)
   if (response) {
     yield put({ type: 'LOGIN_SUCCESS' })
     yield put({ type: 'LOAD_USER_OBJECT', user: response })
@@ -39,8 +88,28 @@ function* loginRequest(action) {
   }
 }
 
+const signupFetch = (username, password) => (
+  fetch('/api/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username,
+      password,
+    }),
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return { success: true }
+    }
+    return { error: response }
+  })
+  .catch(error => ({ error }))
+)
+
 function* signupRequest(action) {
-  const { success, error } = yield call(api.signupFetch, action.username, action.password)
+  const { success, error } = yield call(signupFetch, action.username, action.password)
   if (success) {
     yield put({ type: 'SIGNUP_SUCCESS' })
     yield put({
@@ -53,7 +122,6 @@ function* signupRequest(action) {
     yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Signup failed. Username may be taken.' })
   }
 }
-
 
 export default function* authSagas() {
   yield takeEvery('USER_OBJECT_REQUEST', userObjectRequest)
