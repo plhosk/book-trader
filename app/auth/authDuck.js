@@ -2,11 +2,11 @@ import { call, put, takeLatest, takeEvery } from 'redux-saga/effects'
 
 const authReducer = (state = {}, action) => {
   switch (action.type) {
-    case 'LOAD_USER_OBJECT':
+    case 'USER_OBJECT_UPDATE_STORE':
       return {
         user: action.user,
       }
-    case 'LOGOUT_SUCCESS':
+    case 'USER_OBJECT_CLEAR':
       return {}
     default:
       return state
@@ -36,8 +36,7 @@ function* userObjectRequest() {
   if (response === 'empty') {
     yield put({ type: 'USER_OBJECT_EMPTY' })
   } else if (response) {
-    yield put({ type: 'USER_OBJECT_SUCCESS' })
-    yield put({ type: 'LOAD_USER_OBJECT', user: response })
+    yield put({ type: 'USER_OBJECT_UPDATE_STORE', user: response })
   } else {
     yield put({ type: 'USER_OBJECT_ERROR', error })
     yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Error getting user object.' })
@@ -61,7 +60,7 @@ const logoutFetch = () => (
 function* logoutRequest() {
   const { success, error } = yield call(logoutFetch)
   if (success) {
-    yield put({ type: 'LOGOUT_SUCCESS' })
+    yield put({ type: 'USER_OBJECT_CLEAR' })
   } else {
     yield put({ type: 'LOGOUT_FAILED', error })
     yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Logout failed.' })
@@ -93,8 +92,7 @@ const loginFetch = (username, password) => (
 function* loginRequest(action) {
   const { response, error } = yield call(loginFetch, action.username, action.password)
   if (response) {
-    yield put({ type: 'LOGIN_SUCCESS' })
-    yield put({ type: 'LOAD_USER_OBJECT', user: response })
+    yield put({ type: 'USER_OBJECT_UPDATE_STORE', user: response })
   } else {
     yield put({ type: 'LOGIN_FAILED', error })
     yield put({ type: 'SHOW_ERROR_MESSAGE', error: 'Login failed. Username or password may be incorrect.' })
@@ -124,7 +122,6 @@ const signupFetch = (username, password) => (
 function* signupRequest(action) {
   const { success, error } = yield call(signupFetch, action.username, action.password)
   if (success) {
-    yield put({ type: 'SIGNUP_SUCCESS' })
     yield put({
       type: 'LOGIN_REQUEST',
       username: action.username,

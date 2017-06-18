@@ -71,7 +71,7 @@ class TopBar extends React.Component {
                   labelPosition={'after'}
                   icon={<SocialPerson />}
                   label={<span style={styles.buttonText}>
-                    {user.username}
+                    {user.name}
                   </span>}
                 />
                 { /* </Link> */ }

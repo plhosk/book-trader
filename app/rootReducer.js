@@ -31,7 +31,7 @@ function* logActions() {
   while (true) { //eslint-disable-line
     const action = yield take()
     const state = yield select()
-    console.log('[logActions]', action.type, 'action:', action, 'state:', state) //eslint-disable-line
+    console.log(action.type, 'action:', action, 'state:', state) //eslint-disable-line
   }
 }
 
