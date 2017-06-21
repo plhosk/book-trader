@@ -29,6 +29,7 @@ router.route('/')
     })(req, res, next)
   })
 
+  // Get user object of requesting authenticated user
   .get((req, res) => {
     if (req.isAuthenticated()) {
       // res.send({

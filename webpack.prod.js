@@ -71,6 +71,7 @@ const config = {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest'],
     }),
+    new webpack.optimize.ModuleConcatenationPlugin(),
     // new CodeSplitWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',

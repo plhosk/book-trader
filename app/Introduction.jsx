@@ -1,12 +1,13 @@
 import React from 'react'
 import MapsLocalLibrary from 'material-ui/svg-icons/maps/local-library'
-import { blue500 } from 'material-ui/styles/colors'
+// import { blue500 } from 'material-ui/styles/colors'
 
 const styles = {
   outerDiv: {
     fontSize: '1.1em',
     lineHeight: '1.8em',
     padding: '0 10px',
+    // border: '1px solid lightgrey',
   },
   logo: {
     height: 60,
@@ -16,8 +17,17 @@ const styles = {
     padding: 4,
   },
   title: {
-    color: blue500,
-    fontSize: '2em',
+    // color: blue500,
+    color: '#755248',
+    fontSize: '3em',
+    textAlign: 'center',
+    marginTop: 16,
+  },
+  content: {
+    maxWidth: 400,
+    margin: '0 auto',
+    color: '#755248',
+    marginBottom: 25,
   },
   // instructions: {
   //   color: green500,
@@ -38,23 +48,25 @@ const styles = {
 const Introduction = () => (
   <div style={styles.outerDiv}>
     <h2 style={styles.title}>
-      <MapsLocalLibrary style={styles.logo} color={blue500} />
+      <MapsLocalLibrary style={styles.logo} color={'#755248'} />
       Book Trader
     </h2>
-    <ul>
-      <li>
-        View, add and trade books with other users.
-      </li>
-      <li>
-        Check out this app&rsquo;s source code on <a
-          href="https://github.com/plhosk/book-trader"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GitHub
-        </a>.
-      </li>
-    </ul>
+    <div style={styles.content}>
+      <ul>
+        <li>
+          View, add and trade books with other users.
+        </li>
+        <li>
+          Check out this app&rsquo;s source code on <a
+            href="https://github.com/plhosk/book-trader"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>.
+        </li>
+      </ul>
+    </div>
     { /*
     <div style={styles.instructions}>
       Enter a stock symbol (e.g., AAPL, AMZN, FB, GOOG, MSFT)<br />

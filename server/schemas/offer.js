@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 const AutoIncrement = require('mongoose-sequence')
 
 const offerSchema = mongoose.Schema({
-  originatingUserId: String,
-  targetUserId: String,
-  originatingBookIds: [String],
-  targetBookIds: [String],
+  originatingUserId: Number,
+  targetUserId: Number,
+  originatingBookIds: [Number],
+  targetBookIds: [Number],
   offerDate: { type: Date, default: Date.now },
   cancelled: { type: Boolean, default: false },
   rejected: { type: Boolean, default: false },

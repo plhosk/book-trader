@@ -6,6 +6,7 @@ const authReducer = (state = {}, action) => {
     case 'AUTH_USER_OBJECT_RECEIVED':
       return {
         user: action.user,
+        // user: undefined,
       }
     case 'AUTH_USER_OBJECT_CLEAR':
       return {}
@@ -45,6 +46,8 @@ function* authUserObjectRequest() {
     yield put({ type: 'AUTH_USER_OBJECT_ERROR', error })
     yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Error getting user object.' })
   }
+  // Begin Offers request each time we request user object
+  yield put({ type: 'OFFER_LIST_REQUEST' })
 }
 
 
@@ -97,6 +100,8 @@ function* authLoginRequest(action) {
   const { response, error } = yield call(authLoginFetch, action.username, action.password)
   if (response) {
     yield put({ type: 'AUTH_USER_OBJECT_RECEIVED', user: response })
+    // Offer list changes depending on the user
+    yield put({ type: 'OFFER_LIST_REQUEST' })
   } else {
     yield put({ type: 'AUTH_LOGIN_FAILED', error })
     yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Login failed. Username or password may be incorrect.' })
@@ -137,6 +142,48 @@ function* authSignupRequest(action) {
   }
 }
 
+const userProfileUpdateFetch = (userId, displayName, city, country) => (
+  fetch(`/api/users/${userId}`, {
+    credentials: 'same-origin',
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId,
+      displayName,
+      city,
+      country,
+    }),
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json()
+      .then(json => ({ response: json }))
+    }
+    return { error: response }
+  })
+  .catch(error => ({ error }))
+)
+function* userProfileUpdateRequest(action) {
+  const { response, error } = yield call(
+    userProfileUpdateFetch,
+    action.userId,
+    action.displayName,
+    action.city,
+    action.country,
+  )
+  if (response) {
+    yield put({ type: 'AUTH_USER_OBJECT_RECEIVED', user: response })
+    // Get updated userInfo as well (update user info on book/offer listings)
+    yield put({ type: 'USERINFO_REQUEST' })
+  } else {
+    yield put({ type: 'USER_PROFILE_UPDATE_ERROR', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Error updating user profile.' })
+  }
+}
+
+
 /**
  * Saga initialize function
  */
@@ -145,6 +192,7 @@ function* authSagas() {
   yield takeEvery('AUTH_LOGOUT_REQUEST', authLogoutRequest)
   yield takeLatest('AUTH_LOGIN_REQUEST', authLoginRequest)
   yield takeLatest('AUTH_SIGNUP_REQUEST', authSignupRequest)
+  yield takeLatest('USER_PROFILE_UPDATE_REQUEST', userProfileUpdateRequest)
 }
 
 export { authReducer, authSagas }

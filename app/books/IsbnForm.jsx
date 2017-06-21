@@ -3,37 +3,52 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
 
 const styles = {
   outerDiv: {
+    // margin: 10,
+    border: '1px solid lightgrey',
+    marginTop: 20,
+    paddingBottom: 5,
+  },
+  title: {
+    paddingLeft: 20,
+  },
+  label: {
+    fontWeight: 'bold',
+    paddingLeft: 20,
   },
   textField: {
     maxWidth: 200,
+    marginLeft: 5,
+    marginRight: 5,
     // fontSize: '1.2em',
   },
   button: {
     maxWidth: 200,
-    marginTop: 10,
+    // marginTop: 10,
   },
 }
 
 class IsbnForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { value: '' }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
 
-  handleChange(event) {
+  state = { value: '' }
+
+  handleChange = (event) => {
     this.setState({ value: event.target.value })
   }
 
-  handleSubmit(event) {
+  handleClear = () => {
+    this.setState({ value: '' })
+  }
+
+  handleSubmit = (event) => {
     this.props.dispatch({ type: 'BOOK_ADD_REQUEST', isbn: this.state.value })
     // alert(`An ISBN was submitted: ${this.state.value}`) // eslint-disable-line no-alert
     event.preventDefault()
   }
+
   render() {
     if (!this.props.user) {
       return (
@@ -45,11 +60,12 @@ class IsbnForm extends React.Component {
 
     return (
       <div style={styles.outerDiv}>
-        <h3>Add a book to offer it for trade!</h3>
+        <h3 style={styles.title}>Add a book to offer it for trade!</h3>
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="isbn">
-            ISBN:
+            <span style={styles.label}>ISBN:</span>
             <TextField
+              style={styles.textField}
               id="isbn"
               type="text"
               value={this.state.value}
@@ -60,6 +76,10 @@ class IsbnForm extends React.Component {
             style={styles.button}
             type="submit"
             label="Add Book"
+          />
+          <FlatButton
+            label="Clear"
+            onClick={this.handleClear}
           />
         </form>
       </div>

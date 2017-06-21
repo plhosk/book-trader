@@ -3,6 +3,7 @@ import { take, select, all } from 'redux-saga/effects'
 
 import { errorReducer } from './error/errorDuck'
 import { authReducer, authSagas } from './auth/authDuck'
+import { userInfoReducer, userInfoSagas } from './userInfo/userInfoDuck'
 import { booksReducer, booksSagas } from './books/booksDuck'
 import { offersReducer, offersSagas } from './offers/offersDuck'
 
@@ -10,6 +11,10 @@ import { offersReducer, offersSagas } from './offers/offersDuck'
 const initialState = {
   error: '',
   auth: {},
+  userInfo: {
+    byId: {},
+    allIds: [],
+  },
   books: {
     byId: {},
     allIds: [],
@@ -22,13 +27,15 @@ const initialState = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  userInfo: userInfoReducer,
   error: errorReducer,
   books: booksReducer,
   offers: offersReducer,
 })
 
-// ---------------------------------------------------------
-// Initialize sagas
+/**
+ * Initialize sagas
+ */
 
 // Log every redux action
 function* logActions() {
@@ -41,8 +48,10 @@ function* logActions() {
 
 function* rootSaga() {
   yield all([
+    // crossDependentSagas(),
     logActions(),
     authSagas(),
+    userInfoSagas(),
     booksSagas(),
     offersSagas(),
   ])

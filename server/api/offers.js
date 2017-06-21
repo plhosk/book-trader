@@ -98,7 +98,7 @@ router.route('/')
     offer.originatingUserId = req.user.userId
     offer.targetUserId = req.body.offerRequest.targetUserId
     offer.originatingBookIds = [...req.body.offerRequest.originatingBookIds]
-    offer.targetBookIds = [...req.body.offerRequest.originatingBookIds]
+    offer.targetBookIds = [...req.body.offerRequest.targetBookIds]
     return offer.save()
       .then(() => {
         debug(offer.toJson())

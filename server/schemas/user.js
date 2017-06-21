@@ -27,6 +27,8 @@ const userSchema = mongoose.Schema({
     default: Date.now,
   },
   displayName: String,
+  city: String,
+  country: String,
 })
 
 userSchema.plugin(AutoIncrement, { inc_field: 'userId' })

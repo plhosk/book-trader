@@ -65,7 +65,7 @@
     "eslint-plugin-react": "^7.0.1",
     "html-webpack-plugin": "^2.25.0",
     "json-loader": "^0.5.4",
-    "webpack": "^2.2.0",
+    "webpack": "^3.0.0",
     "webpack-dev-middleware": "^1.8.4",
     "webpack-hot-middleware": "^2.13.2"
   }

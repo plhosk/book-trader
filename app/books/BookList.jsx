@@ -1,88 +1,135 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-// import { Card, CardActions, CardMedia } from 'material-ui/Card'
-// import Subheader from 'material-ui/Subheader'
+import RaisedButton from 'material-ui/RaisedButton'
+import Checkbox from 'material-ui/Checkbox'
+import Divider from 'material-ui/Divider'
 import Paper from 'material-ui/Paper'
-import FlatButton from 'material-ui/FlatButton'
-// import IconButton from 'material-ui/IconButton'
-// import StarBorder from 'material-ui/svg-icons/toggle/star-border'
+
+import SingleBook from './SingleBook'
 
 const styles = {
   outerDiv: {
-    // borderWidth: 1,
-    // borderStyle: 'solid',
-    // borderColor: 'lightgrey',
     margin: 10,
     display: 'flex',
     flexFlow: 'row wrap',
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
   },
-  // flexContainer: {
-  //   width: 200,
-  //   height: 'auto',
-  //   overflowY: 'auto',
-  // },
-  // cardTitle: {
-  //   maxHeight: 50,
-  //   // width: 150,
-  //   overflow: 'visible',
-  //   // whiteSpace: 'nowrap',
-  //   textOverflow: 'ellipsis',
-  // },
-  bookFrame: {
-    // height: 180,
-    // maxHeight: 200,
-    maxWidth: 158,
-    marginRight: 20,
-    marginBottom: 20,
-    padding: 4,
-    // borderWidth: 0,
-    // maxHeight: 400,
-    // verticalAlign: 'bottom',
+  checkbox: {
+    // maxWidth: 300,
+    paddingLeft: 20,
   },
-  bookInfo: {
+  divider: {
+    margin: 10,
   },
   title: {
-    fontWeight: 'bold',
-    fontSize: '120%',
-    padding: 3,
-    textTransform: 'capitalize',
-    // lineHeight: '1.5em',
+    paddingLeft: 20,
   },
-  author: {
-    fontSize: '80%',
-    marginBottom: 5,
+  button: {
+    display: 'block',
+    // margin: '0 auto',
+    margin: 10,
   },
-  thumbnail: {
-    maxWidth: 150,
-  },
-  // cardMedia: {
-  //   // verticalAlign: 'bottom',
-  // },
 }
 
 class BookList extends React.Component {
+
+  state = { ownedOnly: false, wantedBook: undefined, offeredBook: undefined }
 
   componentDidMount() {
     this.props.dispatch({ type: 'BOOK_LIST_REQUEST' })
   }
 
+  handleCheckbox = (event, isInputChecked) => {
+    this.setState({ ownedOnly: isInputChecked })
+  }
+
+  wantBook = (e) => {
+    this.setState({ wantedBook: e.currentTarget.dataset.id })
+  }
+
+  offerBook = (e) => {
+    // this.setState({ offeredBook: e.currentTarget.dataset.id })
+    const offerRequest = {
+      targetUserId: this.props.books.byId[this.state.wantedBook].ownerId,
+      originatingBookIds: [e.currentTarget.dataset.id],
+      targetBookIds: [this.state.wantedBook],
+    }
+    this.props.dispatch({ type: 'OFFER_ADD_REQUEST', offerRequest })
+    this.setState({ wantedBook: undefined })
+  }
+
+  clearState = () => {
+    this.setState({ wantedBook: undefined, offeredBook: undefined })
+  }
+
   render() {
-    const { books } = this.props
+    const { user, books } = this.props
+    const { ownedOnly, wantedBook } = this.state
+
+    if (wantedBook && user) {
+      return (
+        <Paper zDepth={3}>
+          <Divider style={styles.divider} />
+          <h2>Send Trade Request</h2>
+          <div style={styles.outerDiv}>
+            <SingleBook key={wantedBook} bookId={wantedBook}>
+              <h4>Requested Book</h4>
+            </SingleBook>
+            <div>Select the book you want to give</div>
+            {books.allIds.map((bookId) => {
+              if (books.byId[bookId].ownerId !== user.userId) {
+                return null
+              }
+              return (
+                <SingleBook key={bookId} bookId={bookId}>
+                  <RaisedButton
+                    style={styles.button}
+                    primary
+                    label="Offer This Book"
+                    data-id={bookId}
+                    onClick={this.offerBook}
+                  />
+                </SingleBook>
+              )
+            })}
+          </div>
+        </Paper>
+      )
+    }
+
     return (
-      <div style={styles.outerDiv}>
-        {books.allIds.map(bookId => (
-          <Paper key={bookId} style={styles.bookFrame} zDepth={1}>
-            <div style={styles.bookInfo}>
-              <div style={styles.title}>{books.byId[bookId].title}</div>
-              <div style={styles.author}>{`by ${books.byId[bookId].authors[0]}`}</div>
-            </div>
-            <img src={books.byId[bookId].thumbnail} style={styles.thumbnail} alt="" />
-            <FlatButton label="Make Offer" />
-          </Paper>
-        ))}
+      <div>
+        <Divider style={styles.divider} />
+        <h2 style={styles.title}>Browse Books</h2>
+        { user &&
+          <Checkbox
+            label="Show only my books"
+            style={styles.checkbox}
+            checked={ownedOnly}
+            onCheck={this.handleCheckbox}
+          />
+        }
+        <div style={styles.outerDiv}>
+          {books.allIds.map((bookId) => {
+            if (user && ownedOnly && books.byId[bookId].ownerId !== user.userId) {
+              return null
+            }
+            return (
+              <SingleBook key={bookId} bookId={bookId}>
+                {user && user.userId !== books.byId[bookId].ownerId && (
+                  <RaisedButton
+                    style={styles.button}
+                    label="Make Offer"
+                    data-id={bookId}
+                    onClick={this.wantBook}
+                  />
+                )}
+              </SingleBook>
+            )
+          })}
+        </div>
       </div>
     )
   }
@@ -94,15 +141,21 @@ BookList.propTypes = {
     byId: PropTypes.object,
     allIds: PropTypes.array,
   }).isRequired,
-  // user: PropTypes.objectOf(PropTypes.string),
+  user: PropTypes.shape({
+    userId: PropTypes.number,
+    name: PropTypes.string,
+    city: PropTypes.string,
+    country: PropTypes.string,
+  }),
 }
 
-// BookList.defaultProps = {
-//   user: undefined,
-// }
+BookList.defaultProps = {
+  user: undefined,
+}
 
 const mapStateToProps = state => ({
-//   user: state.auth.user,
+  user: state.auth.user,
+  userInfo: state.userInfo,
   books: state.books,
 })
 

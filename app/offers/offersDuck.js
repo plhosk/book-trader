@@ -8,7 +8,7 @@ const offersReducer = (state = { byId: {}, allIds: [] }, action) => {
       const byId = {}
       const allIds = []
       for (let i = 0; i < action.offerList.length; i += 1) {
-        byId[action.offerList[i].bookId] = { ...action.offerList[i] }
+        byId[action.offerList[i].offerId] = { ...action.offerList[i] }
         allIds.push(action.offerList[i].offerId)
       }
       return {

@@ -1,15 +1,15 @@
 Task list
 
 Client:
-  ☐ Specify redux store data structure
-  ☐ Write client API fetches
-  ☐ Write client sagas
   ☐ Think about ways to simplify client structure
-  ☐ Write react components
+  ☐ Clean up react components
+  ☐ Convert { response, error } into try/catch and standardize error handling
+  ☐ Should I be using action creators instead of dispatching direct from components? (deduplication)
+  ☐ Think about visual design
+  ☐ Optimize for mobile
+  ☐ Implement code-splitting
   ☐ Ctrl-Enter for new, Alt-d to toggle done, Alt-c to cancel @critical @high @low @today
 
 Server:
   ☐ Do testing of API and security
-  ☐ Wipe database
-  ☐ Put API routes in separate file? (or not)
-  ☐ Check results of DB call failure
+  ☐ Check results of DB call failure or throwing errors at various points

@@ -5,9 +5,10 @@ import { Route, Switch } from 'react-router-dom'
 import TopBar from './TopBar'
 import ErrorDisplay from './error/ErrorDisplay'
 import Introduction from './Introduction'
+import UserPassForm from './auth/UserPassForm'
 import IsbnForm from './books/IsbnForm'
 import BookList from './books/BookList'
-import UserPassForm from './auth/UserPassForm'
+import OfferList from './offers/OfferList'
 
 const styles = {
   appContent: {
@@ -27,6 +28,7 @@ const AppContent = () => (
         <Route path="/login" component={UserPassForm} />
         <Route path="/signup" component={UserPassForm} />
       </Switch>
+      <Route component={OfferList} />
       <Route component={IsbnForm} />
       <Route component={BookList} />
     </div>
