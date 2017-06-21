@@ -17,7 +17,7 @@
     "wds": "webpack-dev-server --content-base public/ --inline",
     "remove-source-map": "rm ./public/bundle.js.map",
     "remove-bundles": "rm ./public/*.js",
-    "heroku-postbuild": "cross-env NODE_ENV=production webpack --config ./webpack.prod.js -p"
+    "heroku-postbuild": "node_modules/.bin/cross-env NODE_ENV=production node_modules/.bin/webpack --config ./webpack.prod.js -p"
   },
   "dependencies": {
     "babel-polyfill": "^6.20.0",
