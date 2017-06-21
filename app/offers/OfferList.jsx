@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import TimeAgo from 'react-timeago'
 import Paper from 'material-ui/Paper'
 // import Divider from 'material-ui/Divider'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
@@ -9,39 +10,9 @@ import ActionSwapHoriz from 'material-ui/svg-icons/action/swap-horiz'
 
 import SingleBook from '../books/SingleBook'
 
-const timeSince = (date) => {
-  const seconds = Math.floor((new Date() - date) / 1000)
-  let interval = Math.floor(seconds / 31536000)
-  if (interval > 1) {
-    return `${interval} years`
-  }
-  interval = Math.floor(seconds / 2592000)
-  if (interval > 1) {
-    return `${interval} months`
-  }
-  interval = Math.floor(seconds / 86400)
-  if (interval > 1) {
-    return `${interval} days`
-  }
-  interval = Math.floor(seconds / 3600)
-  if (interval > 1) {
-    return `${interval} hours`
-  }
-  interval = Math.floor(seconds / 60)
-  if (interval > 1) {
-    return `${interval} minutes`
-  }
-  return `${Math.floor(seconds)} seconds`
-}
-
 const styles = {
-  // outerDiv: {
-  //   margin: 10,
-  //   display: 'flex',
-  //   flexFlow: 'row wrap',
-  //   justifyContent: 'flex-start',
-  //   alignItems: 'flex-end',
-  // },
+  outerDiv: {
+  },
   offerContainer: {
     marginBottom: 20,
   },
@@ -49,28 +20,14 @@ const styles = {
     display: 'flex',
     flexFlow: 'row nowrap',
     justifyContent: 'space-around',
-    // alignItems: 'flex-start',
     alignItems: 'center',
     padding: '5px 10px',
-    // maxWidth: 158,
-    // marginRight: 20,
-    // marginBottom: 20,
-    // padding: 4,
   },
   swapHolder: {
-    // border: '1px solid grey',
-    // display: 'flex',
-    // flexFlow: 'column nowrap',
-    // justifyContent: 'center',
-    // alignItems: 'stretch',
-    // alignContent: 'stretch',
-    // height: '100%',
   },
   swapIcon: {
     height: 60,
     width: 60,
-    // position: 'relative',
-    // top: 16,
   },
   heading: {
     fontWeight: 'bold',
@@ -101,21 +58,6 @@ const styles = {
     alignContent: 'center',
     alignItems: 'center',
   },
-  // bookInfo: {
-  // },
-  // title: {
-  //   fontWeight: 'bold',
-  //   fontSize: '120%',
-  //   padding: 3,
-  //   textTransform: 'capitalize',
-  // },
-  // author: {
-  //   fontSize: '80%',
-  //   marginBottom: 5,
-  // },
-  // thumbnail: {
-  //   maxWidth: 150,
-  // },
 }
 
 class OfferList extends React.Component {
@@ -139,13 +81,13 @@ class OfferList extends React.Component {
 
     if (!user) {
       return (
-        <h3>Log in to see your offers</h3>
+        <h3 style={{ color: '#755248' }}>Log in to see your offers</h3>
       )
     }
     return (
       <Card>
         <CardHeader
-          style={{ backgroundColor: '#ead39c' }}
+          style={{ backgroundColor: '#ead39c', color: '#755248' }}
           title={`Your Offers (${offers.allIds.length})`}
           subtitle="Click to show"
           actAsExpander
@@ -156,15 +98,14 @@ class OfferList extends React.Component {
             {offers.allIds.map(offerId => (
               <Paper key={offerId} style={styles.offerContainer} zDepth={2}>
                 <div style={styles.heading}>
-                  {`Offer made
-                    ${timeSince(Date.parse(offers.byId[offerId].offerDate))}
-                    ago by
-                    ${
-                      offers.byId[offerId].originatingUserId === user.userId ?
-                      user.name + ' (You)' : // eslint-disable-line prefer-template
-                      userInfo.byId[offers.byId[offerId].originatingUserId].name
-                    }
-                  `}
+                  Offer made&nbsp;
+                  <TimeAgo date={Date.parse(books.byId[offerId].creationDate)} />
+                  &nbsp;ago by&nbsp;
+                  {
+                    offers.byId[offerId].originatingUserId === user.userId ?
+                    user.name + ' (You)' : // eslint-disable-line prefer-template
+                    userInfo.byId[offers.byId[offerId].originatingUserId].name
+                  }
                 </div>
                 <Paper style={styles.offerFrame} zDepth={0}>
                   <div>

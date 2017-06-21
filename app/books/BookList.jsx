@@ -9,15 +9,41 @@ import Paper from 'material-ui/Paper'
 import SingleBook from './SingleBook'
 
 const styles = {
-  outerDiv: {
+  bookListRows: {
     margin: 10,
     display: 'flex',
     flexFlow: 'row wrap',
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
+    // border: '1px solid lightgrey',
+  },
+  offerTitleFlex: {
+    display: 'flex',
+    flexFlow: 'row wrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: 10,
+  },
+  offerPanel: {
+    margin: 10,
+    display: 'flex',
+    flexFlow: 'row wrap',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    // border: '1px solid lightgrey',
+  },
+  requesting: {
+    // border: '2px solid #755248',
+    border: '2px solid #d1b280',
+    borderRadius: 16,
+    padding: 5,
+    margin: '0 5px',
+    marginBottom: 10,
+    paddingTop: 0,
+    minWidth: 190,
+    maxWidth: 400,
   },
   checkbox: {
-    // maxWidth: 300,
     paddingLeft: 20,
   },
   divider: {
@@ -25,11 +51,12 @@ const styles = {
   },
   title: {
     paddingLeft: 20,
+    color: '#755248',
   },
   button: {
     display: 'block',
-    // margin: '0 auto',
     margin: 10,
+    maxWidth: 150,
   },
 }
 
@@ -50,7 +77,6 @@ class BookList extends React.Component {
   }
 
   offerBook = (e) => {
-    // this.setState({ offeredBook: e.currentTarget.dataset.id })
     const offerRequest = {
       targetUserId: this.props.books.byId[this.state.wantedBook].ownerId,
       originatingBookIds: [e.currentTarget.dataset.id],
@@ -72,28 +98,39 @@ class BookList extends React.Component {
       return (
         <Paper zDepth={3}>
           <Divider style={styles.divider} />
-          <h2>Send Trade Request</h2>
-          <div style={styles.outerDiv}>
-            <SingleBook key={wantedBook} bookId={wantedBook}>
-              <h4>Requested Book</h4>
-            </SingleBook>
-            <div>Select the book you want to give</div>
-            {books.allIds.map((bookId) => {
-              if (books.byId[bookId].ownerId !== user.userId) {
-                return null
-              }
-              return (
-                <SingleBook key={bookId} bookId={bookId}>
-                  <RaisedButton
-                    style={styles.button}
-                    primary
-                    label="Offer This Book"
-                    data-id={bookId}
-                    onClick={this.offerBook}
-                  />
-                </SingleBook>
-              )
-            })}
+          <div style={styles.offerTitleFlex}>
+            <h2 style={styles.title}>Send Trade Request</h2>
+            <RaisedButton
+              style={styles.button}
+              label="Cancel Trade"
+              onClick={this.clearState}
+            />
+          </div>
+          <div style={styles.offerPanel}>
+            <div style={styles.requesting}>
+              <h3 style={styles.title}>You are requesting:</h3>
+              <SingleBook key={wantedBook} bookId={parseInt(wantedBook, 10)} />
+            </div>
+            <div style={styles.requesting}>
+              <h3 style={styles.title}>Select one of your books to offer:</h3>
+              <div style={styles.bookListRows}>
+                {books.allIds.map((bookId) => {
+                  if (books.byId[bookId].ownerId !== user.userId) {
+                    return null
+                  }
+                  return (
+                    <SingleBook key={bookId} bookId={bookId}>
+                      <RaisedButton
+                        style={styles.button}
+                        label="Offer Book"
+                        data-id={bookId}
+                        onClick={this.offerBook}
+                      />
+                    </SingleBook>
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </Paper>
       )
@@ -111,7 +148,7 @@ class BookList extends React.Component {
             onCheck={this.handleCheckbox}
           />
         }
-        <div style={styles.outerDiv}>
+        <div style={styles.bookListRows}>
           {books.allIds.map((bookId) => {
             if (user && ownedOnly && books.byId[bookId].ownerId !== user.userId) {
               return null

@@ -8,12 +8,13 @@ import FlatButton from 'material-ui/FlatButton'
 const styles = {
   outerDiv: {
     // margin: 10,
-    border: '1px solid lightgrey',
+    // border: '1px solid lightgrey',
     marginTop: 20,
     paddingBottom: 5,
   },
   title: {
     paddingLeft: 20,
+    color: '#755248',
   },
   label: {
     fontWeight: 'bold',
@@ -52,8 +53,8 @@ class IsbnForm extends React.Component {
   render() {
     if (!this.props.user) {
       return (
-        <div style={styles.outerDiv}>
-          <h3>Log in to add your books!</h3>
+        <div>
+          <h3 style={{ color: '#755248' }}>Log in to add your books</h3>
         </div>
       )
     }

@@ -1,13 +1,12 @@
 import React from 'react'
 import MapsLocalLibrary from 'material-ui/svg-icons/maps/local-library'
-// import { blue500 } from 'material-ui/styles/colors'
+import RaisedButton from 'material-ui/RaisedButton'
 
 const styles = {
   outerDiv: {
     fontSize: '1.1em',
     lineHeight: '1.8em',
     padding: '0 10px',
-    // border: '1px solid lightgrey',
   },
   logo: {
     height: 60,
@@ -17,32 +16,17 @@ const styles = {
     padding: 4,
   },
   title: {
-    // color: blue500,
     color: '#755248',
     fontSize: '3em',
     textAlign: 'center',
     marginTop: 16,
   },
   content: {
-    maxWidth: 400,
+    maxWidth: 500,
     margin: '0 auto',
     color: '#755248',
     marginBottom: 25,
   },
-  // instructions: {
-  //   color: green500,
-  //   marginTop: 10,
-  //   textAlign: 'center',
-  //   fontSize: '1.1em',
-  // },
-  // quandl: {
-  //   textAlign: 'right',
-  //   fontSize: '0.6em',
-  //   padding: 0,
-  //   margin: 0,
-  //   marginBottom: 5,
-  //   lineHeight: '0.6em',
-  // },
 }
 
 const Introduction = () => (
@@ -64,6 +48,12 @@ const Introduction = () => (
           >
             GitHub
           </a>.
+        </li>
+        <li>
+          Click to log in as a &nbsp;<RaisedButton
+            label="Test user"
+          />
+          &nbsp; or create your own account to try out the site&apos;s features.
         </li>
       </ul>
     </div>
