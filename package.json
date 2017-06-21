@@ -5,6 +5,9 @@
   "author": "Paul Hoskinson",
   "repository": "https://github.com/plhosk/book-trader.git",
   "license": "Apache-2.0",
+  "engines":{
+    "node": "8.1.2"
+  },
   "scripts": {
     "build": "webpack --config ./webpack.dev.js --progress",
     "build-prod": "cross-env NODE_ENV=production webpack --config ./webpack.prod.js -p --progress",
