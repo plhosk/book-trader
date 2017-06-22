@@ -72,6 +72,7 @@ function* offerListRequest() {
     yield put({ type: 'OFFER_LIST_RECEIVED', offerList: response })
   } else {
     yield put({ type: 'OFFER_LIST_REQUEST_ERROR', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Error requesting offer list from server.' })
   }
 }
 
@@ -102,6 +103,7 @@ function* offerAddRequest(action) {
     yield put({ type: 'OFFER_ADD_CONFIRMED', offer: response })
   } else {
     yield put({ type: 'OFFER_ADD_REQUEST_ERROR', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Error adding offer.' })
   }
 }
 
@@ -129,6 +131,7 @@ function* offerAcceptRequest(action) {
     })
   } else {
     yield put({ type: 'OFFER_ACCEPT_REQUEST_ERROR', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Error accepting offer.' })
   }
 }
 
@@ -163,6 +166,7 @@ function* offerCancelRejectRequest(action) {
     })
   } else {
     yield put({ type: 'OFFER_CANCEL_REJECT_REQUEST_ERROR', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Error cancelling offer.' })
   }
 }
 

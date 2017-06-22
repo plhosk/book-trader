@@ -64,7 +64,7 @@ class IsbnForm extends React.Component {
         <h3 style={styles.title}>Add a book to offer it for trade!</h3>
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="isbn">
-            <span style={styles.label}>ISBN:</span>
+            <span style={styles.label}>Enter ISBN:</span>
             <TextField
               style={styles.textField}
               id="isbn"

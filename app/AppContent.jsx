@@ -22,12 +22,12 @@ const AppContent = () => (
   <div>
     <Route component={TopBar} />
     <div style={styles.appContent}>
-      <Route component={ErrorDisplay} />
       <Switch>
         <Route path="/" exact component={Introduction} />
         <Route path="/login" component={UserPassForm} />
         <Route path="/signup" component={UserPassForm} />
       </Switch>
+      <Route component={ErrorDisplay} />
       <Route component={OfferList} />
       <Route component={IsbnForm} />
       <Route component={BookList} />

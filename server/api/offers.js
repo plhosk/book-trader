@@ -70,7 +70,8 @@ router.route('/')
   // Get list of all offers pertaining to user (originating or target)
   .get((req, res, next) => {
     if (!req.isAuthenticated() || !req.user) {
-      return res.sendStatus(401)
+      // return res.sendStatus(401)
+      return res.send({})
     }
     return Offer.find({
       $or: [

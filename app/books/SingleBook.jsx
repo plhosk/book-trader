@@ -95,7 +95,8 @@ class SingleBook extends React.Component {
           <TimeAgo date={Date.parse(books.byId[bookId].creationDate)} />
           &nbsp;by&nbsp;
           <button style={styles.ownerButton} onClick={this.handleOwnerClick}>
-            {userInfo.byId[books.byId[bookId].ownerId].name}
+            {userInfo.allIds.length === 0 ? 'user' :
+              userInfo.byId[books.byId[bookId].ownerId].name}
           </button>
           <Popover
             open={this.state.open}

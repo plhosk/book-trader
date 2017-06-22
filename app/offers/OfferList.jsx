@@ -19,7 +19,7 @@ const styles = {
   offerFrame: {
     display: 'flex',
     flexFlow: 'row nowrap',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     padding: '5px 10px',
   },
@@ -52,6 +52,7 @@ const styles = {
     textAlign: 'center',
   },
   buttonHolder: {
+    flex: 1,
     display: 'flex',
     flexFlow: 'column nowrap',
     justifyContent: 'center',
@@ -99,7 +100,7 @@ class OfferList extends React.Component {
               <Paper key={offerId} style={styles.offerContainer} zDepth={2}>
                 <div style={styles.heading}>
                   Offer made&nbsp;
-                  <TimeAgo date={Date.parse(books.byId[offerId].creationDate)} />
+                  <TimeAgo date={Date.parse(offers.byId[offerId].offerDate)} />
                   &nbsp;ago by&nbsp;
                   {
                     offers.byId[offerId].originatingUserId === user.userId ?

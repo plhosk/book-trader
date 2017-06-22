@@ -70,6 +70,7 @@ function* bookListRequest() {
     yield put({ type: 'BOOK_LIST_RECEIVED', bookList: response })
   } else {
     yield put({ type: 'BOOK_LIST_REQUEST_ERROR', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Error requesting book list from server.' })
   }
 }
 
@@ -100,6 +101,7 @@ function* bookAddRequest(action) {
     yield put({ type: 'BOOK_ADD_CONFIRMED', book: response })
   } else {
     yield put({ type: 'BOOK_ADD_REQUEST_ERROR', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Error adding book Try a different ISBN.' })
   }
 }
 
@@ -123,6 +125,7 @@ function* bookDeleteRequest(action) {
     yield put({ type: 'BOOK_DELETE_CONFIRMED', bookId: action.bookId })
   } else {
     yield put({ type: 'BOOK_DELETE_REQUEST_ERROR', error })
+    yield put({ type: 'ERROR_MESSAGE_SHOW', error: 'Error deleting book.' })
   }
 }
 
