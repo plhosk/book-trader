@@ -19,18 +19,15 @@ const config = {
       'react-dom',
       'redux',
       'react-redux',
-      'react-router',
+      'react-router-dom',
       'redux-saga',
-      'inline-style-prefixer',
-      'lodash.merge',
-      'core-js',
-      'redbox-react',
+      // 'material-ui', // makes vendor file too large...
     ],
   },
   output: {
     path: buildPath,
-    filename: '[name].[chunkhash].js',
-    chunkFilename: '[chunkhash].js',
+    filename: 'bundle.[name].[chunkhash].js',
+    chunkFilename: 'bundle.[chunkhash].js',
   },
   resolve: {
     modules: [
@@ -68,8 +65,18 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   names: ['vendor', 'manifest'],
+    //   chunks: ['vendor', 'manifest'],
+    //   minChunks: Infinity,
+    // }),
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'manifest'],
+      name: 'vendor',
+      minChunks: Infinity,
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity,
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     // new CodeSplitWebpackPlugin(),

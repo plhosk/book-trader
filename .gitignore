@@ -5,7 +5,4 @@ bundle.js.map
 npm-debug.log
 .DS_Store
 .env
-main.*.js
-manifest.*.js
-vendor.*.js
 index.html
