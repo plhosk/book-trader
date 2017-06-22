@@ -21,6 +21,7 @@ Paul Hoskinson (plhosk@gmail.com)
 - **Server**: Node/Express, Mongoose
 
 ### Technical Discussion
+- This project was an exercise to teach myself how to develop a full stack web app. Rather than use create-react-app or another boilerplate, I wanted to do everything from the ground up. I've tried to make the code as well-structured and readable as possible and follow best practices but there are bound to be some messy areas.
 - The project consists of a Single Page App client written with React, Redux and React Router, and a Node server using Express and Mongoose.
 - The server provides basic authentication, hot-reloading and a REST API to serve and update information on a remote MongoDB database. All main content types on the client can be hot-reloaded (React components, Redux reducers, redux-saga Sagas)
 - The client makes use of Redux and Redux-Saga to organize and update local data and perform asynchronous API fetches. React Router is used to vary the displayed content depending on URL path.
