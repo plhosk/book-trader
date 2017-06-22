@@ -6,6 +6,7 @@ Paul Hoskinson (plhosk@gmail.com)
 - Add your books by entering the ISBN. Browse books that others have added.
 - Request a book trade by selecting the book you want and offering one of your own in return.
 - View and manage your incoming and outgoing trade offers.
+- After accepting a trade, nothing happens. If this were a real website instead of a coding exercise, this would be when each user sends their book to the other by traditional mail.
 
 ---
 
@@ -21,7 +22,7 @@ Paul Hoskinson (plhosk@gmail.com)
 - **Server**: Node/Express, Mongoose
 
 ### Technical Discussion
-- This project was an exercise to teach myself how to develop a full stack web app. Rather than use create-react-app or another boilerplate, I wanted to do everything from the ground up. I've tried to make the code as well-structured and readable as possible and follow best practices but there are bound to be some messy areas.
+- This project was an exercise to teach myself how to develop a full stack web app. Rather than use create-react-app or another boilerplate, I wanted to do everything from the ground up with some of the latest technologies. I've tried to make the code as well-structured and readable as possible and follow best practices but there are bound to be some messy areas.
 - The client is a Single Page App written with React, Redux and Redux-Saga. React Router is used to vary the displayed content depending on URL path.
 - The Node/Express server provides basic authentication, hot-reloading and a REST API to serve and update information on a remote MongoDB database. 
 - The project is configured with Webpack, hot-reloading, babel, yarn and ESLint for ease of development.
