@@ -39,6 +39,9 @@ const rootReducer = combineReducers({
 
 // Log every redux action
 function* logActions() {
+  if (process.env.NODE_ENV === 'production') {
+    return
+  }
   while (true) { //eslint-disable-line
     const action = yield take()
     const state = yield select()
