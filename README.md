@@ -9,9 +9,9 @@ Paul Hoskinson (plhosk@gmail.com)
 
 ---
 
-- Try the live version on Heroku: [https://book-trader-plhosk.herokuapp.com/](https://book-trader-plhosk.herokuapp.com/)
+- Try the live version on Heroku (may take a few seconds to load the first time): [https://book-trader-plhosk.herokuapp.com/](https://book-trader-plhosk.herokuapp.com/)
 - Github Repository: [https://github.com/plhosk/book-trader](https://github.com/plhosk/book-trader)
-- This app makes use of a book covers API.
+- This app makes use of the [Open Library Search API](https://openlibrary.org/dev/docs/api/search).
 
 ---
 
@@ -21,7 +21,7 @@ Paul Hoskinson (plhosk@gmail.com)
 - **Server**: Node/Express, Mongoose
 
 ### Technical Discussion
-- The project consists of a Single Page App on the client written with React, Redux and React Router, and a Node server using Express and Mongoose.
+- The project consists of a Single Page App client written with React, Redux and React Router, and a Node server using Express and Mongoose.
 - The server provides basic authentication, hot-reloading and a REST API to serve and update information on a remote MongoDB database. All main content types on the client can be hot-reloaded (React components, Redux reducers, redux-saga Sagas)
 - The client makes use of Redux and Redux-Saga to organize and update local data and perform asynchronous API fetches. React Router is used to vary the displayed content depending on URL path.
 - The project is configured with Webpack 3, hot-reloading, babel, yarn and ESLint for ease of development.
@@ -33,5 +33,5 @@ Paul Hoskinson (plhosk@gmail.com)
 - Install npm packages: `yarn`
 - Rename the file ".env.example" in your project directory to ".env" and assign the URL of your node server to the SERVER_URL variable (example: `SERVER_URL=http://localhost:3000`)
 - Start the Node/Express web server: `yarn start`
-- The server provides Hot Reloading and dynamic webpack bundling in development mode. Alternatively you can build a static production bundle with `yarn build-prod` and start the production server with `yarn start-prod`
 - Visit the server URL in your web browser (default port 3000): [http://localhost:3000](http://localhost:3000)
+- The server provides Hot Reloading and dynamic webpack bundling in development mode. Alternatively you can build a static production bundle with `yarn build-prod` and start the production server with `yarn start-prod`
