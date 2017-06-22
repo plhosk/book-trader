@@ -1,6 +1,5 @@
 ## Book Trader - Full stack web app
 Paul Hoskinson (plhosk@gmail.com)
-
 ![Book-trader screenshot](https://raw.githubusercontent.com/plhosk/temp/master/screenshot-book-trader.png)
 
 - Add your books by entering the ISBN. Browse books that others have added.
