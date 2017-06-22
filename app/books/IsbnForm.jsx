@@ -28,6 +28,7 @@ const styles = {
   },
   button: {
     maxWidth: 200,
+    marginLeft: 30,
     // marginTop: 10,
   },
 }
@@ -69,6 +70,7 @@ class IsbnForm extends React.Component {
               style={styles.textField}
               id="isbn"
               type="text"
+              hintText="Enter ISBN"
               value={this.state.value}
               onChange={this.handleChange}
             />

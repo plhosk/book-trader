@@ -33,7 +33,8 @@ const styles = {
     color: 'white',
     paddingTop: 6,
     marginBottom: 8,
-    textAlign: 'right',
+    textAlign: 'left',
+    minWidth: 160,
   },
   buttonText: {
     // fontSize: '1.1em',

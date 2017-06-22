@@ -18,10 +18,11 @@ const styles = {
   },
   offerFrame: {
     display: 'flex',
-    flexFlow: 'row nowrap',
+    flexFlow: 'row wrap',
     justifyContent: 'flex-start',
     alignItems: 'center',
     padding: '5px 10px',
+    // border: '1px solid red',
   },
   swapHolder: {
   },
@@ -58,6 +59,11 @@ const styles = {
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
+    minWidth: 160,
+  },
+  offerButton: {
+    // minWidth: 130,
+    // wordWrap: 'normal !important',
   },
 }
 
@@ -133,6 +139,11 @@ class OfferList extends React.Component {
                       Current offer status:
                     </div>
                     <div style={styles.offerStatus}>
+                      {!offers.byId[offerId].accepted &&
+                        !offers.byId[offerId].cancelled &&
+                        !offers.byId[offerId].rejected &&
+                        <div style={{ color: 'orange' }}>New Offer</div>
+                      }
                       {offers.byId[offerId].accepted && <div style={{ color: 'green' }}>Accepted</div>}
                       {offers.byId[offerId].cancelled && <div style={{ color: 'red' }}>Cancelled</div>}
                       {offers.byId[offerId].rejected && <div style={{ color: 'red' }}>Rejected</div>}
@@ -140,17 +151,17 @@ class OfferList extends React.Component {
                     {user.userId === offers.byId[offerId].targetUserId &&
                       <div>
                         {!offers.byId[offerId].accepted && !offers.byId[offerId].rejected &&
-                          <RaisedButton label="Accept Offer" onClick={this.handleAccept} data-id={offerId} primary />
+                          <RaisedButton style={styles.offerButton} label="Accept Offer" onClick={this.handleAccept} data-id={offerId} primary />
                         }
                         {!offers.byId[offerId].rejected && !offers.byId[offerId].accepted &&
-                          <RaisedButton label="Reject Offer" onClick={this.handleCancelReject} data-id={offerId} secondary />
+                          <RaisedButton style={styles.offerButton} label="Reject Offer" onClick={this.handleCancelReject} data-id={offerId} secondary />
                         }
                       </div>
                     }
                     {user.userId === offers.byId[offerId].originatingUserId &&
                       <div>
                         {!offers.byId[offerId].cancelled &&
-                          <RaisedButton label="Cancel Offer" onClick={this.handleCancelReject} data-id={offerId} secondary />
+                          <RaisedButton style={styles.offerButton} label="Cancel Offer" onClick={this.handleCancelReject} data-id={offerId} secondary />
                         }
                       </div>
                     }

@@ -9,10 +9,10 @@ import { List, ListItem } from 'material-ui/List'
 
 const styles = {
   bookFrame: {
-    maxWidth: 168,
-    marginRight: 20,
-    marginBottom: 20,
-    padding: 8,
+    maxWidth: 160,
+    marginRight: 10,
+    marginBottom: 10,
+    padding: 4,
     margin: 10,
     backgroundColor: '#f8f5f2',
   },

@@ -22,6 +22,7 @@ const styles = {
     fontSize: '3em',
     textAlign: 'center',
     marginTop: 16,
+    lineHeight: '1em',
   },
   content: {
     maxWidth: 500,
