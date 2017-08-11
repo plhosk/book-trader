@@ -5,7 +5,7 @@
   "author": "Paul Hoskinson",
   "repository": "https://github.com/plhosk/book-trader.git",
   "license": "Apache-2.0",
-  "engines":{
+  "engines": {
     "node": "8.1.2"
   },
   "scripts": {
